@@ -56,8 +56,11 @@ def build_report(before: dict, after: dict, provenance: dict) -> dict:
         raise ValueError("Before and after inputs differ; rerun both comparisons.")
     return {
         "project": "ParityLens", "scenario": "RGB/BGR preprocessing handoff",
+        "scenario_id": "historical_rgb_bgr", "scenario_origin": "historical",
         "exported_at": datetime.now(timezone.utc).isoformat(),
         "contract_version": before["contract_version"],
+        "contract_sha256": before["input_sha256"]["contract/preprocessing_contract.json"],
+        "contract_hash_policy": "SHA-256 of the executed contract bytes",
         "comparison_policy": before["comparison_policy"],
         "before_commit": provenance["before_commit"],
         "repaired_commit": provenance["repaired_commit"],

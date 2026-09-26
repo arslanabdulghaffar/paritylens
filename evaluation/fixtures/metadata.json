@@ -1,0 +1,323 @@
+{
+  "version": "synthetic-v1",
+  "seed": 20260926,
+  "generator": "evaluation/fixtures.py",
+  "probe_policy": "The documented probe is set to asymmetric RGB values satisfying the frozen precondition.",
+  "fixtures": [
+    {
+      "id": "gradients_1",
+      "filename": "gradients_1.png",
+      "pattern": "gradients",
+      "variant": 1,
+      "image_size": [
+        224,
+        224
+      ],
+      "probe_coordinate": [
+        0,
+        0
+      ],
+      "probe_pixel_rgb": [
+        210,
+        100,
+        20
+      ],
+      "sha256": "32bf49e6aa1a7b5022ed64a6394ba633747feef5dcb97e2dd6392995759296bc",
+      "pixel_sha256": "7c94fd8d11303fab9dd7b77c4b069024e781e0d4418b4ea8b66f7510f4a27776"
+    },
+    {
+      "id": "gradients_2",
+      "filename": "gradients_2.png",
+      "pattern": "gradients",
+      "variant": 2,
+      "image_size": [
+        224,
+        224
+      ],
+      "probe_coordinate": [
+        0,
+        0
+      ],
+      "probe_pixel_rgb": [
+        199,
+        107,
+        29
+      ],
+      "sha256": "2f1816f041eef0e2944015fc2a6cd6512a79e049e807f47ff989f50a7d8983bc",
+      "pixel_sha256": "c22da049617f66c12e60ec0cf8f9e7425975bc3f4c13133bea081da0941a3ba5"
+    },
+    {
+      "id": "gradients_3",
+      "filename": "gradients_3.png",
+      "pattern": "gradients",
+      "variant": 3,
+      "image_size": [
+        224,
+        224
+      ],
+      "probe_coordinate": [
+        0,
+        0
+      ],
+      "probe_pixel_rgb": [
+        188,
+        114,
+        38
+      ],
+      "sha256": "08451c6cf6c5095a31ba6da5cd107b5c57f5a54c1291e55db68f40ba1c462584",
+      "pixel_sha256": "01c24fba3e07e45fcc87c1f1380b8c97c04ce87fd35e086cbd66baf9b535c477"
+    },
+    {
+      "id": "blocks_1",
+      "filename": "blocks_1.png",
+      "pattern": "blocks",
+      "variant": 1,
+      "image_size": [
+        224,
+        224
+      ],
+      "probe_coordinate": [
+        0,
+        0
+      ],
+      "probe_pixel_rgb": [
+        210,
+        100,
+        20
+      ],
+      "sha256": "fb13e87f1ddab79088e4755aba44b4f7fe962147f3e4453c47da0e581226242c",
+      "pixel_sha256": "3203b3898389d83de3006bd762d195b2f5f2a1f1f9f21e16b6d9e15a1b760c3d"
+    },
+    {
+      "id": "blocks_2",
+      "filename": "blocks_2.png",
+      "pattern": "blocks",
+      "variant": 2,
+      "image_size": [
+        224,
+        224
+      ],
+      "probe_coordinate": [
+        0,
+        0
+      ],
+      "probe_pixel_rgb": [
+        199,
+        107,
+        29
+      ],
+      "sha256": "09cbec29a9d66660cc1fa9d722ebc4e994f4cb76e47ae22946e53d0639a287a1",
+      "pixel_sha256": "8083bb64d08f3b1d1337830437c34b8e61bbf712001f3871aa80e47256d0ae9a"
+    },
+    {
+      "id": "blocks_3",
+      "filename": "blocks_3.png",
+      "pattern": "blocks",
+      "variant": 3,
+      "image_size": [
+        224,
+        224
+      ],
+      "probe_coordinate": [
+        0,
+        0
+      ],
+      "probe_pixel_rgb": [
+        188,
+        114,
+        38
+      ],
+      "sha256": "26a30db239024073ce0772d5f9e3a1226b136e18184e4ff0ecb14c9d2ae680be",
+      "pixel_sha256": "50a441fb0d8d9565fc12d02dc5cd0a8e42406abfc940c2fa8eec784e3b24d78f"
+    },
+    {
+      "id": "checker_1",
+      "filename": "checker_1.png",
+      "pattern": "checker",
+      "variant": 1,
+      "image_size": [
+        224,
+        224
+      ],
+      "probe_coordinate": [
+        0,
+        0
+      ],
+      "probe_pixel_rgb": [
+        210,
+        100,
+        20
+      ],
+      "sha256": "c4ca77310bf25662f9564c973942569712ced2ec6d92610e3d2ddb9937e812d4",
+      "pixel_sha256": "87df38f90b07c67f8aa027e1a33c80f5a5dec6b641954a507a7b1cffee6502ec"
+    },
+    {
+      "id": "checker_2",
+      "filename": "checker_2.png",
+      "pattern": "checker",
+      "variant": 2,
+      "image_size": [
+        224,
+        224
+      ],
+      "probe_coordinate": [
+        0,
+        0
+      ],
+      "probe_pixel_rgb": [
+        199,
+        107,
+        29
+      ],
+      "sha256": "368dfebcd2e6e275e618884f257558fab4c031fdffa687f6d8da53b3b7dc3f6d",
+      "pixel_sha256": "480ccc791f4a77af68cbc9913f5ae1d15302ab477dab0836511bebce1308a4a5"
+    },
+    {
+      "id": "checker_3",
+      "filename": "checker_3.png",
+      "pattern": "checker",
+      "variant": 3,
+      "image_size": [
+        224,
+        224
+      ],
+      "probe_coordinate": [
+        0,
+        0
+      ],
+      "probe_pixel_rgb": [
+        188,
+        114,
+        38
+      ],
+      "sha256": "f0ff631b25c86560cee79cf47084ab4a81226d74576dd1ced3679ff02515f24a",
+      "pixel_sha256": "5dcd7e7d8fcf8c0ab7a0d9e9450cd12ae13726b63cbabcc524db655b680ee710"
+    },
+    {
+      "id": "intensity_1",
+      "filename": "intensity_1.png",
+      "pattern": "intensity",
+      "variant": 1,
+      "image_size": [
+        224,
+        224
+      ],
+      "probe_coordinate": [
+        0,
+        0
+      ],
+      "probe_pixel_rgb": [
+        210,
+        100,
+        20
+      ],
+      "sha256": "8826d2a53ec0432493ce76c233511e4bbae8ecabfb00a707415466331d9d0d33",
+      "pixel_sha256": "bdbb3e7742ef21d2577a9ce37b32b72ba8e730d47a732dbf7a45e3e5c7543693"
+    },
+    {
+      "id": "intensity_2",
+      "filename": "intensity_2.png",
+      "pattern": "intensity",
+      "variant": 2,
+      "image_size": [
+        224,
+        224
+      ],
+      "probe_coordinate": [
+        0,
+        0
+      ],
+      "probe_pixel_rgb": [
+        199,
+        107,
+        29
+      ],
+      "sha256": "6294ce2af7bc8ce1dd2e04032ce8bf8d04c3c676169724930e6a0d41bde6b4af",
+      "pixel_sha256": "4f76b87fad49d51a33df5862284e190ef2bfd9c209b2271ef5261007570518f9"
+    },
+    {
+      "id": "intensity_3",
+      "filename": "intensity_3.png",
+      "pattern": "intensity",
+      "variant": 3,
+      "image_size": [
+        224,
+        224
+      ],
+      "probe_coordinate": [
+        0,
+        0
+      ],
+      "probe_pixel_rgb": [
+        188,
+        114,
+        38
+      ],
+      "sha256": "bd04401f295629879551935b9e366d052f31bffe93d82b9cd0682413c1808f5f",
+      "pixel_sha256": "ef0b0202861b9606fc621eff0150ee07adadd49148eceb08784b438c64ef875a"
+    },
+    {
+      "id": "noise_1",
+      "filename": "noise_1.png",
+      "pattern": "noise",
+      "variant": 1,
+      "image_size": [
+        224,
+        224
+      ],
+      "probe_coordinate": [
+        0,
+        0
+      ],
+      "probe_pixel_rgb": [
+        210,
+        100,
+        20
+      ],
+      "sha256": "87c0e9c37c1ec0e4bf7e51b2f8a20e8e5da6e6439f22dfb0827f59b76a2ab245",
+      "pixel_sha256": "3fe9d6c2a53ca4fba6ff744bb791c2fc692275f5d64025a0fe275659ade7d8a4"
+    },
+    {
+      "id": "noise_2",
+      "filename": "noise_2.png",
+      "pattern": "noise",
+      "variant": 2,
+      "image_size": [
+        224,
+        224
+      ],
+      "probe_coordinate": [
+        0,
+        0
+      ],
+      "probe_pixel_rgb": [
+        199,
+        107,
+        29
+      ],
+      "sha256": "ee5ac449d75ad5e4e389d1034fadeb4dee76651e6eabb63894d305206fff60eb",
+      "pixel_sha256": "7b1db5de0ab4eb1f0b825c9b496f9aca1faf8e25ae49b34533e4b029919ad09d"
+    },
+    {
+      "id": "noise_3",
+      "filename": "noise_3.png",
+      "pattern": "noise",
+      "variant": 3,
+      "image_size": [
+        224,
+        224
+      ],
+      "probe_coordinate": [
+        0,
+        0
+      ],
+      "probe_pixel_rgb": [
+        188,
+        114,
+        38
+      ],
+      "sha256": "439071ef6507646a00e98c7fbc463e728acb83a638de9d988e9553bae778c6c5",
+      "pixel_sha256": "21e55d99e0464302ee29431c93b549e4544ca7ee4d03e3a7e1040b76601aa4ab"
+    }
+  ]
+}
