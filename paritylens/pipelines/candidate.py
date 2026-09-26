@@ -1,9 +1,8 @@
 """
 Candidate (serving) preprocessing pipeline.
 
-Independently written using OpenCV. Contains exactly one deliberate semantic
-defect: cv2.imread returns BGR channel order. This is intentional and must NOT
-be repaired during Milestone 1.
+Independently written using OpenCV. The BGR channel-order defect has been
+repaired: cv2.imread output is converted to RGB immediately after decode.
 
 Each stage saves its output to evidence/candidate/<stage>.npy.
 """
@@ -27,13 +26,13 @@ def run(image_path: str | Path) -> dict[str, np.ndarray]:
 
     # ------------------------------------------------------------------
     # Stage: decode
-    # cv2.imread returns BGR uint8 HWC — this is the deliberate defect.
-    # The array is stored and saved as-is without any channel conversion.
+    # cv2.imread returns BGR uint8 HWC; convert to RGB per contract.
     # ------------------------------------------------------------------
     decode_arr = cv2.imread(str(image_path))
     if decode_arr is None:
         raise FileNotFoundError(f"cv2.imread could not load: {image_path}")
-    # decode_arr is (H, W, 3) uint8, channel order BGR
+    decode_arr = cv2.cvtColor(decode_arr, cv2.COLOR_BGR2RGB)
+    # decode_arr is now (H, W, 3) uint8, channel order RGB
     np.save(EVIDENCE_DIR / "decode.npy", decode_arr)
     stages["decode"] = decode_arr
 
@@ -50,7 +49,6 @@ def run(image_path: str | Path) -> dict[str, np.ndarray]:
     # cv2 INTER_LINEAR resize to (224, 224) then divide by 255.0 → float32.
     # Note: cv2.resize takes (width, height) not (height, width).
     # The fixture is already 224x224 so resize is a no-op numerically.
-    # Channel order defect propagates transparently.
     # ------------------------------------------------------------------
     resized = cv2.resize(geometry_arr, (224, 224), interpolation=cv2.INTER_LINEAR)
     scaling_arr = resized.astype(np.float32) / 255.0
@@ -59,11 +57,8 @@ def run(image_path: str | Path) -> dict[str, np.ndarray]:
 
     # ------------------------------------------------------------------
     # Stage: normalization
-    # Same constants as reference. No second defect introduced.
-    # Internal arithmetic in float64; cast to float32 before save.
-    # Channel 0 is Blue (not Red) due to the decode defect — wrong
-    # normalization is applied per channel as a consequence, not an
-    # independent defect.
+    # Same constants as reference. Internal arithmetic in float64;
+    # cast to float32 before save. Channel 0 is now Red (RGB order).
     # ------------------------------------------------------------------
     mean = np.array([0.485, 0.456, 0.406], dtype=np.float64)
     std  = np.array([0.229, 0.224, 0.225], dtype=np.float64)
