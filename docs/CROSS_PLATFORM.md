@@ -1,5 +1,7 @@
 # Cross-platform and UI review
 
+The UI findings below describe the earlier submission-preparation review. For the subsequent presentation redesign and local Chromium viewport checks, see [UI_REVIEW.md](UI_REVIEW.md). Linux execution remains pending.
+
 ## Static compatibility review
 
 Reviewed non-protected Python source and configuration for paths, imports, process spawning, text encoding, temporary files, filename case, newlines and Git assumptions. Python sources parse successfully.

@@ -1,5 +1,6 @@
 import json
 import logging
+from html import escape
 
 import streamlit as st
 
@@ -9,22 +10,18 @@ from evaluation.fixtures import load_manifest
 from evaluation.report import validate_suite
 from evaluation.runner import input_fingerprint, run_scenario
 from evaluation.scenarios import get_scenario
+from ui.components import section
 
 
 def render_controlled(scenario_id: str, contract: dict) -> None:
     scenario = get_scenario(scenario_id)
     st.caption("Controlled evaluation scenario")
-    st.subheader("01  Compare")
-    st.markdown(f"**{scenario.title}**")
+    st.subheader(scenario.title)
     st.write(scenario.description)
     fixtures = {item["id"]: item for item in load_manifest()["fixtures"]}
     fixture_id = st.selectbox("Evaluation fixture", list(fixtures), key="evaluation_fixture")
     fixture = fixtures[fixture_id]
-    context = st.columns(3)
-    for column, label, value in zip(context, ("Reference", "Candidate", "Frozen contract"),
-                                     ("Pillow · RGB", "Controlled OpenCV variant", f"v{contract['version']} · unchanged")):
-        column.caption(label)
-        column.write(value)
+    st.caption(f"Pillow RGB reference · controlled OpenCV candidate · frozen contract v{contract['version']}")
     results = st.session_state.setdefault("evaluation_runs", {})
     selection = f"{scenario_id}:{fixture_id}"
     selected = results.setdefault(selection, {})
@@ -38,6 +35,8 @@ def render_controlled(scenario_id: str, contract: dict) -> None:
                 try:
                     with st.spinner("Executing the selected evaluation case…"):
                         selected[mode] = run_scenario(run_id, fixture_id)
+                    st.session_state[f"evaluation_trace_{selection}"] = mode
+                    st.session_state[f"evaluation_stage_{selection}"] = selected[mode]["result"]["observed_first_boundary"] or "decode"
                 except Exception:
                     st.error("Evaluation could not complete. Check the local server log; no result is inferred.")
                     logging.exception("Controlled evaluation failed")
@@ -51,14 +50,10 @@ def render_controlled(scenario_id: str, contract: dict) -> None:
                 st.caption("Not run yet. Results appear after execution.")
     st.caption("Shape and dtype checks cover all recorded stages. Clean control runs the independent RGB-correct candidate.")
     st.divider()
-    st.subheader("02  Trace")
-    image_col, trace_col = st.columns([1, 4])
-    with image_col:
-        st.image(str(ROOT / "evaluation/fixtures" / fixture["filename"]),
-                 caption=f"{fixture['pattern']} · {fixture['image_size'][0]} × {fixture['image_size'][1]}", width="stretch")
+    st.subheader("Controlled pipeline trace")
     available = [mode for mode in ("defect", "control") if mode in selected]
     report = None
-    with trace_col:
+    with st.container():
         if not available:
             st.info("Run the controlled defect to inspect its first violating boundary.")
         else:
@@ -73,7 +68,7 @@ def render_controlled(scenario_id: str, contract: dict) -> None:
                          "Controlled candidate" if mode == "defect" else "Clean candidate",
                          stage_key=f"evaluation_stage_{selection}")
     st.divider()
-    st.subheader("03  Result")
+    st.subheader("Controlled result")
     st.caption("Controlled ParityLens evaluation scenario. These runs are not historical repairs.")
     if report:
         case = report["result"]
@@ -87,11 +82,15 @@ def render_controlled(scenario_id: str, contract: dict) -> None:
                            key="evaluation_report", width="stretch")
     else:
         st.caption("Awaiting execution.")
+    with st.expander("Controlled fixture and contract"):
+        st.image(str(ROOT / "evaluation/fixtures" / fixture["filename"]),
+                 caption=f"{fixture['pattern']} · {fixture['image_size'][0]} × {fixture['image_size'][1]}", width=160)
+        st.json(fixture, expanded=False)
+        st.caption(f"Frozen contract v{contract['version']} · no Bob repair is claimed for this scenario")
 
 
 def render_summary() -> None:
-    st.divider()
-    st.subheader("Deterministic synthetic evaluation")
+    section("Evidence at a glance", "Deterministic synthetic evaluation. Measured results, with their scope kept visible.", "evaluation-evidence")
     try:
         suite = json.loads((ROOT / "evaluation/results.json").read_text(encoding="utf-8"))
         validate_suite(suite)
@@ -103,15 +102,20 @@ def render_summary() -> None:
         return
     metrics = suite["metrics"]
     values = (
-        ("Cases evaluated", str(metrics["cases_evaluated"])),
-        ("Defects detected", f"{metrics['defects_detected']}/{metrics['defect_cases']}"),
-        ("Boundary localization", f"{metrics['boundary_localization']['correct']}/{metrics['boundary_localization']['total']}"),
-        ("Classification", f"{metrics['supported_classification']['correct']}/{metrics['supported_classification']['total']}"),
+        ("Supported defects detected", f"{metrics['defects_detected']}/{metrics['defect_cases']}"),
+        ("First boundaries localized", f"{metrics['boundary_localization']['correct']}/{metrics['boundary_localization']['total']}"),
         ("Clean false positives", f"{metrics['clean_false_positives']}/{metrics['clean_cases']}"),
         ("Reproducibility", "MATCH" if metrics["reproducibility"]["matched"] else "DIFFERS"),
     )
-    for column, (label, value) in zip(st.columns(6), values):
-        column.metric(label, value)
-    st.caption(f"{suite['fixture_count']} synthetic images · {len(suite['scenarios'])} scenarios · two independent runs. "
-               f"Measured {suite['generated_at'][:10]}. {metrics['clean_controls_passed']}/{metrics['clean_cases']} clean controls pass.")
+    st.markdown('<div class="metric-grid">' + ''.join(
+        f'<div class="evidence-metric"><strong>{escape(value)}</strong><span>{escape(label)}</span></div>'
+        for label, value in values) + '</div>', unsafe_allow_html=True)
+    baseline = metrics["final_shape_dtype_baseline"]
+    st.markdown(f'<div class="baseline"><strong>{baseline["naive_defects_detected"]}/{baseline["defective_cases"]}</strong>'
+                '<span>Detected by the <b>final shape/dtype-only baseline</b></span>'
+                '<p>This baseline checks final tensor structure only. It does not represent all tests or ML monitoring tools.</p></div>', unsafe_allow_html=True)
+    st.write(f"**{metrics['cases_evaluated']} cases per run** · {suite['fixture_count']} synthetic images · "
+             f"{len(suite['scenarios'])} scenarios · {metrics['reproducibility']['runs']} independent runs")
+    st.caption(f"Supported classifications: {metrics['supported_classification']['correct']}/{metrics['supported_classification']['total']} · "
+               f"Clean controls passed: {metrics['clean_controls_passed']}/{metrics['clean_cases']} · Measured {suite['generated_at'][:10]}")
     st.caption(suite["disclaimer"])

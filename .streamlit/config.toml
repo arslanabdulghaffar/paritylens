@@ -3,3 +3,11 @@ gatherUsageStats = false
 
 [server]
 headless = true
+
+[theme]
+base = "dark"
+primaryColor = "#88a7ff"
+backgroundColor = "#10151e"
+secondaryBackgroundColor = "#1a2331"
+textColor = "#edf2fa"
+font = "sans serif"

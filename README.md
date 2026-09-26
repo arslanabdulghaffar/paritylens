@@ -33,9 +33,13 @@ provides `cv2` without desktop GUI dependencies; do not install both OpenCV
 distributions in the same environment. No secrets, external APIs, or GPU are
 required. Usage statistics are disabled in `.streamlit/config.toml`.
 
-The historical case is selected by default. Run BEFORE and AFTER, inspect the
-trace, then download the JSON evidence report. Select a controlled scenario to
-run its defect and a clean candidate on the same synthetic fixture.
+The historical case is selected by default. Click **REPRODUCE HIDDEN BUG**,
+inspect the connected trace and recorded channel slots, then click **VERIFY BOB
+REPAIR**. AFTER automatically shows the repaired trace. The hero's historical
+failure pattern is an illustration, not a live result before execution.
+Download JSON from **Technical evidence · contract, provenance and verification**.
+Use **Explore additional failure modes** for controlled scaling/normalization
+and their clean controls. See [UI review](docs/UI_REVIEW.md) for browser checks.
 
 ## CLI and verification
 

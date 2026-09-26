@@ -4,151 +4,153 @@ import logging
 import streamlit as st
 
 from demo.report import report_json
-from demo.ui import badges, render_trace
+from demo.runner import FIXTURE, ROOT, check_integrity, provenance, run_demo
+from demo.ui import badges, render_trace, timeline
 from evaluation.ui import render_controlled, render_summary
-from demo.runner import FIXTURE, ROOT, SCENARIO, check_integrity, provenance, run_demo
-
-st.set_page_config(page_title="ParityLens", page_icon="◧", layout="wide")
-st.markdown("""
-<style>
-.block-container { max-width: 1300px; padding-top: 2rem; padding-bottom: 3rem; }
-h1 { letter-spacing: -.045em; padding-bottom: .15rem !important; }
-h3 { letter-spacing: -.02em; }
-.eyebrow { font: 600 .72rem monospace; letter-spacing: .12em; color: #758393; }
-.subtitle { color: #758393; font-size: 1.08rem; margin-bottom: 1.3rem; }
-.checks { display: flex; gap: 7px; flex-wrap: wrap; margin: 12px 0; }
-.pill { border: 1px solid #71809655; border-radius: 5px; padding: 5px 9px;
-        font: 600 .76rem monospace; }
-.pass { color: #17845c; background: #17845c0d; border-color: #17845c55; }
-.fail { color: #d04b42; background: #d04b420d; border-color: #d04b4255; }
-.muted { color: #758393; }
-.timeline { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 8px; margin: 16px 0; }
-.stage { border: 1px solid #71809644; border-radius: 7px; padding: 12px 10px; font: .78rem monospace; }
-.stage strong { display: block; margin-bottom: 7px; overflow-wrap: anywhere; }
-.stage.pass { border-color: #17845c88; }
-.stage.fail { border: 2px solid #d04b42; }
-.semantic { padding: 14px 16px; border-left: 4px solid #d04b42; background: #d04b420a;
-            font: 700 1rem monospace; margin: 12px 0; overflow-wrap: anywhere; }
-@media(max-width: 650px) { .timeline { grid-template-columns: 1fr 1fr; } }
-</style>
-""", unsafe_allow_html=True)
+from ui.components import bob_story, footer, hero, journey, section
+from ui.theme import apply_theme
 
 
 def execute(mode: str) -> None:
+    st.session_state["scenario_selector"] = "historical_rgb_bgr"
     st.session_state.pop(mode, None)
+    st.session_state.pop("execution_error", None)
     try:
         with st.spinner("Executing pipelines and frozen comparisons…"):
             st.session_state[mode] = run_demo(mode)
+        st.session_state["trace_mode"] = mode
+        st.session_state["stage"] = st.session_state[mode]["first_violating_boundary"] or "decode"
     except Exception:
-        st.error("Execution could not complete. Check the local server log, dependencies, and source integrity, then rerun.")
+        st.session_state["execution_error"] = "Execution could not complete. Check the local server log, dependencies and source integrity, then rerun."
         logging.exception("ParityLens demo failed")
 
 
-manifest = provenance()
-integrity = check_integrity()
-intact = all(integrity.values())
-st.markdown('<div class="eyebrow">NEURALFOUNDRY / PREPROCESSING DEBUGGER</div>', unsafe_allow_html=True)
-st.title("ParityLens")
-st.markdown('<div class="subtitle">Find where the model\'s input changed. Then prove the repair.</div>', unsafe_allow_html=True)
-if not intact:
-    st.error("Source integrity check failed. Results are unavailable until the approved experiment is restored.")
-    st.write([name for name, matches in integrity.items() if not matches])
-    st.stop()
+def select_scenario(scenario: str) -> None:
+    st.session_state["scenario_selector"] = scenario
 
-contract = json.loads((ROOT / "contract/preprocessing_contract.json").read_text(encoding="utf-8"))
 
-scenario_id = st.selectbox(
-    "Scenario", ("historical_rgb_bgr", "scaling_mismatch", "normalization_mismatch"),
-    format_func=lambda value: {
-        "historical_rgb_bgr": "RGB/BGR channel order · Historical Bob case",
-        "scaling_mismatch": "Scaling mismatch · Controlled evaluation",
-        "normalization_mismatch": "Normalization mismatch · Controlled evaluation",
-    }[value], key="scenario_selector",
-)
-if scenario_id == "historical_rgb_bgr":
-    st.caption("Historical Bob case · Run BEFORE to see matching shape and dtype fail at decode. Run AFTER to verify Bob's RGB conversion with unchanged checks.")
-    st.subheader("01  Compare")
-    st.markdown(f"**{SCENARIO}**")
-    context = st.columns(4)
-    for column, label, value in zip(context,
-        ("Reference pipeline", "Candidate pipeline", "Frozen contract", "Fixture"),
-        ("Pillow · RGB", "OpenCV · historical / repaired", f"v{contract['version']} · human approved", "defect_rgb_bgr.png")):
-        with column:
-            st.caption(label)
-            st.write(value)
+def proof_card(mode: str, result: dict | None) -> None:
+    title = "Before · hidden mismatch" if mode == "before" else "After · repaired candidate"
+    if mode == "after" and result and result["verification_state"] == "PASS":
+        title = "After · verified repair"
+    st.markdown("### " + title)
+    st.write("Exact historical candidate" if mode == "before" else "Current Bob-repaired candidate")
+    if not result:
+        st.info("Not run yet. Reproduce the hidden bug above." if mode == "before" else "Not run yet. Verify the repaired candidate below.")
+        return
+    badges(result)
+    if result["first_violating_boundary"]:
+        st.markdown(f"First violation: **`{result['first_violating_boundary']}`**")
+        st.write("Classification: `" + str(result["classification"]) + "`")
+    else:
+        passed = sum(stage["comparison"] == "PASS" for stage in result["stages"])
+        st.markdown(f"**{passed} / {len(result['stages'])} boundaries passed**")
+    if mode == "after":
+        st.write("Normal end-to-end verification: **" + result["verification_state"] + "**")
+        st.caption("Intervention disabled · same frozen checks")
+    st.caption("Executed " + result["executed_at"][:19].replace("T", " ") + " UTC")
 
-    left, right = st.columns(2)
-    for column, mode, title in ((left, "before", "BEFORE BOB REPAIR"), (right, "after", "AFTER BOB REPAIR")):
-        with column, st.container(border=True):
-            st.markdown(f"**{title}**")
-            st.caption("Exact historical candidate" if mode == "before" else "Current Bob-repaired candidate")
-            if st.button(f"Run {title}", key=f"run_{mode}", type="primary" if mode == "before" else "secondary", width="stretch"):
-                execute(mode)
-            result = st.session_state.get(mode)
-            if result:
-                badges(result)
-                if result["first_violating_boundary"]:
-                    st.markdown(f"First violation: **`{result['first_violating_boundary']}`**")
-                    st.caption(result["classification"])
-                else:
-                    st.markdown(f"**{len(result['stages'])} / {len(result['stages'])} frozen comparisons pass**")
-                    st.caption("Normal candidate run · intervention disabled")
-                st.caption("Executed " + result["executed_at"][:19].replace("T", " ") + " UTC")
-            else:
-                st.caption("Not run yet. Results appear after execution.")
 
+def historical_demo() -> None:
     before, after = st.session_state.get("before"), st.session_state.get("after")
-    st.caption("Shape and dtype badges check all recorded stages, including the final model input.")
-    st.divider()
-    st.subheader("02  Trace")
-    image_col, trace_col = st.columns([1, 4])
-    with image_col:
-        st.image(str(ROOT / FIXTURE), caption="Synthetic input · 224 × 224", width="stretch")
-    with trace_col:
-        available = [name for name in ("before", "after") if st.session_state.get(name)]
-        if not available:
-            st.info("Run BEFORE to locate the first boundary where the input changes.")
-            st.code("decode → geometry → scaling → normalization → model_input", language=None)
-        else:
-            mode = st.radio("Execution", available, format_func=lambda value: value.upper(), horizontal=True, key="trace_mode")
-            result = st.session_state[mode]
-            render_trace(result, "Historical candidate" if mode == "before" else "Repaired candidate")
+    section("A hidden bug. An inspectable repair.", "GUIDED DEMO / Historical RGB/BGR · Pillow reference vs OpenCV candidate", "guided-demo")
+    journey(before, after)
+    st.markdown("### Follow the input through the pipeline")
+    available = [name for name in ("before", "after") if st.session_state.get(name)]
+    if available:
+        mode = st.radio("Execution", available, format_func=str.upper, horizontal=True, key="trace_mode")
+        render_trace(st.session_state[mode], "Historical candidate" if mode == "before" else "Repaired candidate")
+    else:
+        timeline(None)
+        st.info("Reproduce the hidden bug to see real stage results and channel values. No live execution has run yet.")
+    bob_story()
+    section("The proof is the comparison.", "Run both candidates. Keep the reference, contract, comparator, verifier and fixtures unchanged.")
+    left, right = st.columns(2, gap="medium")
+    with left, st.container(border=True):
+        proof_card("before", before)
+    with right, st.container(border=True):
+        proof_card("after", after)
+        st.button("VERIFY BOB REPAIR", key="run_after", on_click=execute, args=("after",), width="stretch")
+    st.caption("Shape and dtype checks cover all recorded stages, including the final model input.")
 
-    st.divider()
-    st.subheader("03  Verify repair")
-    a, b, c = st.columns(3)
-    with a, st.container(border=True):
-        st.caption("BEFORE")
-        st.markdown("**BGR decode mismatch**")
-        st.write(f"{before['parity_check']} · {before['first_violating_boundary'] or 'no violation'}" if before else "Awaiting historical execution")
-    with b, st.container(border=True):
-        st.caption("BOB REPAIR")
-        st.markdown("**Explicit BGR → RGB conversion**")
-        st.code("cv2.imread(...)\n        ↓\ncv2.cvtColor(..., cv2.COLOR_BGR2RGB)", language=None)
-    with c, st.container(border=True):
-        st.caption("AFTER")
-        st.markdown("**" + ("All frozen checks pass" if after and after["verification_state"] == "PASS" else "Verification pending" if not after else "Verification failed") + "**")
-        st.write("Final verification: " + (after["verification_state"] if after else "NOT RUN"))
-    st.caption("Repair produced during the recorded IBM Bob IDE workflow. This app runs the recorded code; it does not invoke Bob.")
-    st.markdown('<div class="checks">' + ''.join(f'<span class="pill pass">{label} unchanged</span>'
-        for label in ("Frozen contract", "Comparator", "Verifier", "Fixtures")) + '</div>', unsafe_allow_html=True)
-    with st.expander("Provenance and verification evidence"):
-        st.text("Before commit: " + manifest["before_commit"])
-        st.text("Repair commit: " + manifest["repaired_commit"])
+
+def failure_modes() -> None:
+    section("Explore additional failure modes", "CONTROLLED EVALUATION / Authored scenarios, separate from the historical Bob repair.", "failure-modes")
+    for column, scenario, title, description in zip(
+        st.columns(2, gap="medium"), ("scaling_mismatch", "normalization_mismatch"),
+        ("Scaling drift", "Normalization drift"),
+        ("Correct channel order. Incorrect value scale.", "Correct early stages. Incorrect mean and standard deviation."),
+    ):
+        with column, st.container(border=True):
+            st.caption("CONTROLLED EVALUATION")
+            st.markdown("### " + title)
+            st.write(description)
+            st.button("Explore " + title.lower(), key="choose_" + scenario, on_click=select_scenario,
+                      args=(scenario,), width="stretch")
+    with st.expander("Scenario navigation"):
+        st.selectbox("Active scenario", ("historical_rgb_bgr", "scaling_mismatch", "normalization_mismatch"),
+                     format_func=lambda value: {"historical_rgb_bgr": "RGB/BGR channel order · Historical Bob case",
+                                                "scaling_mismatch": "Scaling mismatch · Controlled evaluation",
+                                                "normalization_mismatch": "Normalization mismatch · Controlled evaluation"}[value],
+                     key="scenario_selector")
+    scenario = st.session_state["scenario_selector"]
+    if scenario != "historical_rgb_bgr":
+        st.button("Return to the historical Bob case", key="return_historical", on_click=select_scenario,
+                  args=("historical_rgb_bgr",))
+        render_controlled(scenario, contract)
+
+
+def technical_evidence() -> None:
+    section("Evidence you can inspect.", "Provenance, unchanged artifacts and execution reports.", "technical-evidence")
+    with st.expander("Technical evidence · contract, provenance and verification"):
+        st.markdown(f"**Frozen contract v{contract['version']} · integrity PASS**")
+        st.write("Historical BEFORE: " + manifest["before_commit"])
+        st.write("Bob repair: " + manifest["repaired_commit"])
         st.caption(manifest["hash_policy"])
-        st.caption("The historical snapshot matches its recorded SHA-256; the current core matches the repair commit. Each run uses an isolated, byte-for-byte copy.")
+        st.json(manifest, expanded=False)
+        st.json(integrity, expanded=False)
+        st.markdown("**Original synthetic fixture**")
+        st.image(str(ROOT / FIXTURE), caption="Historical RGB/BGR input · 224 × 224", width=160)
+        st.markdown("**Recorded Bob session evidence**")
+        st.write("Four original session summaries remain in bob_sessions/. They are not embedded here; public screenshot use requires human review.")
+        st.code("\n".join(path.relative_to(ROOT).as_posix() for path in sorted((ROOT / "bob_sessions").glob("*.png"))), language=None)
+        before, after = st.session_state.get("before"), st.session_state.get("after")
         if after:
+            st.markdown("**Normal verification command and output**")
             st.code(after["verification"]["command"], language="bash")
             st.code(after["verification"]["stdout"], language=None)
             if after["verification"]["stderr"]:
                 st.warning(after["verification"]["stderr"])
-    if before and after:
-        st.download_button("Download evidence report · JSON", report_json(before, after, manifest),
-                           file_name="paritylens-rgb-bgr-evidence.json", mime="application/json", width="stretch")
-    else:
-        st.button("Run both comparisons to unlock the evidence report", disabled=True, width="stretch")
-    st.caption("One fixture. One defect. The same frozen checks before and after.")
-else:
-    render_controlled(scenario_id, contract)
+        if before and after:
+            st.download_button("Download historical evidence · JSON", report_json(before, after, manifest),
+                               file_name="paritylens-rgb-bgr-evidence.json", mime="application/json", width="stretch")
+        else:
+            st.caption("Run both historical comparisons to enable the JSON evidence download.")
 
+
+st.set_page_config(page_title="ParityLens · Preprocessing parity", page_icon="◧", layout="wide")
+apply_theme()
+manifest = provenance()
+integrity = check_integrity()
+hero()
+if not all(integrity.values()):
+    st.error("Source integrity check failed. Restore the approved experiment before executing.")
+    st.write([name for name, matches in integrity.items() if not matches])
+    st.stop()
+contract = json.loads((ROOT / "contract/preprocessing_contract.json").read_text(encoding="utf-8"))
+
+primary, secondary, _ = st.columns([1.3, 1, 1.2])
+with primary:
+    st.button("REPRODUCE HIDDEN BUG", key="run_before", type="primary", width="stretch", on_click=execute, args=("before",))
+with secondary:
+    st.markdown('<a class="evidence-link" href="#evaluation-evidence" target="_self">EXPLORE EVIDENCE ↗</a>', unsafe_allow_html=True)
+if st.session_state.get("execution_error"):
+    st.error(st.session_state["execution_error"])
+if st.session_state.get("scenario_selector", "historical_rgb_bgr") == "historical_rgb_bgr":
+    historical_demo()
+else:
+    st.info("You're exploring a controlled evaluation below. Reproduce the hidden bug to return to the historical Bob story.")
+failure_modes()
 render_summary()
+technical_evidence()
+footer()
