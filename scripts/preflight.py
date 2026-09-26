@@ -13,7 +13,7 @@ from demo.runner import provenance, run_demo
 from evaluation.report import case_report, validate_suite
 from evaluation.runner import input_fingerprint, run_evaluation
 from integrity.check_integrity import check
-from hosting_check import check_startup
+from scripts.hosting_check import check_startup
 
 
 def preflight() -> dict:
@@ -106,7 +106,7 @@ def preflight() -> dict:
 
     def tests():
         result = subprocess.run([sys.executable, "-B", "-m", "unittest", "discover", "-v"], cwd=ROOT,
-                                capture_output=True, text=True, timeout=240)
+                                capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=240)
         if result.returncode:
             raise ValueError(result.stdout + result.stderr)
         return " / ".join(line for line in result.stderr.splitlines() if line.startswith("Ran ") or line == "OK")

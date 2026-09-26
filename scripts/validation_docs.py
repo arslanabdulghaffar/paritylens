@@ -4,7 +4,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def main() -> None:
+def documents() -> dict[str, str]:
     suite = json.loads((ROOT / "evaluation/results.json").read_text(encoding="utf-8"))
     benchmark = json.loads((ROOT / "evaluation/benchmark_results.json").read_text(encoding="utf-8"))
     metrics = suite["metrics"]
@@ -52,7 +52,7 @@ def main() -> None:
               "python -m evaluation.benchmark", "python -m integrity.check_integrity", "python scripts/preflight.py",
               "python scripts/validation_docs.py", "```", "",
               "Default integrity checking is byte-exact for this baseline checkout. Use --portable on other checkouts to allow only CRLF/LF text differences; the historical snapshot remains byte-exact.", ""]
-    (ROOT / "docs/VALIDATION.md").write_text("\n".join(lines), encoding="utf-8")
+    validation = "\n".join(lines)
     facts = ["# Submission facts", "", "Project: ParityLens (NeuralFoundry).", "",
              "Problem: matching tensor shape and dtype can conceal a semantically different model input.",
              "Solution: compare recorded preprocessing boundaries, locate the first violation, show numerical/source evidence, and verify a real repair with unchanged checks.",
@@ -71,7 +71,12 @@ def main() -> None:
              "The app runs allowlisted local code and fixtures with isolated temporary evidence. No arbitrary uploads, user shell commands, remote Bob API, or external LLM calls. See SECURITY.md for remaining resource and dependency risks.",
              *["- " + value for value in limits[:5]], "",
              "No production-readiness, universal detection, novelty, prize, or deployment claim is made. Nothing is deployed by these validation commands.", ""]
-    (ROOT / "docs/SUBMISSION_FACTS.md").write_text("\n".join(facts), encoding="utf-8")
+    return {"docs/VALIDATION.md": validation, "docs/SUBMISSION_FACTS.md": "\n".join(facts)}
+
+
+def main() -> None:
+    for name, content in documents().items():
+        (ROOT / name).write_text(content, encoding="utf-8")
 
 
 if __name__ == "__main__":

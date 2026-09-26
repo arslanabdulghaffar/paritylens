@@ -110,9 +110,17 @@ not all conventional ML monitoring. Two runs match, including recorded-array has
 
 See [technical validation](docs/VALIDATION.md) for measured timings, environment,
 adversarial tests, and limitations; [architecture](docs/ARCHITECTURE.md),
-[security review](docs/SECURITY.md), [deployment preflight](docs/DEPLOYMENT.md),
+[security review](docs/SECURITY.md), [deployment guide](docs/DEPLOYMENT.md),
 [demo script](docs/DEMO_SCRIPT.md), and [submission facts](docs/SUBMISSION_FACTS.md)
 provide the final review material. CI is prepared but has not been run remotely.
+
+For submission preparation, use the [release checklist](docs/RELEASE_CHECKLIST.md),
+[judge Q&A](docs/JUDGE_QA.md), [submission draft](docs/SUBMISSION_DRAFT.md), and
+[video shot list](docs/VIDEO_SHOTLIST.md). Run `python scripts/final_review.py`
+for preflight plus claims, release-file and bundle checks. Build the local review
+ZIP with `python scripts/build_release_bundle.py`; reviewed new files must be
+staged first. See [final local validation](docs/FINAL_VALIDATION.md) for results
+and remaining human checks. Neither command publishes or deploys the project.
 
 The set has 15 RGB PNGs spanning gradients, blocks, checkers, intensity regions,
 and seeded noise. Generation metadata, probe values, and hashes are stored in

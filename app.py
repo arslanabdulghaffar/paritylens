@@ -28,7 +28,7 @@ h3 { letter-spacing: -.02em; }
 .stage.pass { border-color: #17845c88; }
 .stage.fail { border: 2px solid #d04b42; }
 .semantic { padding: 14px 16px; border-left: 4px solid #d04b42; background: #d04b420a;
-            font: 700 1rem monospace; margin: 12px 0; }
+            font: 700 1rem monospace; margin: 12px 0; overflow-wrap: anywhere; }
 @media(max-width: 650px) { .timeline { grid-template-columns: 1fr 1fr; } }
 </style>
 """, unsafe_allow_html=True)
@@ -55,7 +55,7 @@ if not intact:
     st.write([name for name, matches in integrity.items() if not matches])
     st.stop()
 
-contract = json.loads((ROOT / "contract/preprocessing_contract.json").read_text())
+contract = json.loads((ROOT / "contract/preprocessing_contract.json").read_text(encoding="utf-8"))
 
 scenario_id = st.selectbox(
     "Scenario", ("historical_rgb_bgr", "scaling_mismatch", "normalization_mismatch"),
@@ -66,7 +66,7 @@ scenario_id = st.selectbox(
     }[value], key="scenario_selector",
 )
 if scenario_id == "historical_rgb_bgr":
-    st.caption("Historical Bob case")
+    st.caption("Historical Bob case · Run BEFORE to see matching shape and dtype fail at decode. Run AFTER to verify Bob's RGB conversion with unchanged checks.")
     st.subheader("01  Compare")
     st.markdown(f"**{SCENARIO}**")
     context = st.columns(4)
