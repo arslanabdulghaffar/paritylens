@@ -39,10 +39,17 @@ button:focus-visible, a:focus-visible { outline: 3px solid #a9bdff !important; o
 .pattern { border: 1px solid #354155; border-radius: 14px; padding: 24px; background: #161e2a; }
 .pattern-title { font-size: .9rem; font-weight: 650; margin-bottom: 18px; }
 .pattern-row { display: flex; justify-content: space-between; gap: 10px; padding: 13px 0; border-bottom: 1px solid #354155; font: 600 .85rem ui-monospace, monospace; }
-.pattern-note { color: #aab7ca; font-size: .8rem; line-height: 1.5; margin: 16px 0 0; }
+.pattern-note { color: #aab7ca; font-size: .875rem; line-height: 1.5; margin: 16px 0 0; }
 .status-pass { color: #80dcb2; }
 .status-fail { color: #ffb09e; }
 .evidence-link { display: inline-flex; min-height: 48px; align-items: center; font-size: .85rem; font-weight: 650; text-decoration: none; }
+.evidence-strip { display: grid; grid-template-columns: 1fr 1.2fr .8fr; gap: 20px; border-block: 1px solid #354155; padding: 14px 0; margin-top: 14px; }
+.evidence-strip > div { min-width: 0; }
+.evidence-strip span { color: #becbde; font-size: .9rem; }
+.evidence-strip p { margin: 3px 0 0; font-size: .9rem; }
+.evidence-strip strong { font-size: 1.1rem; color: #d5dfff; }
+.evidence-strip-note { color: #aab7ca; font-size: .85rem; margin: 6px 0 0; }
+.supporting-note { color: #b6c3d6; font-size: .94rem; margin: 0; }
 .section-head { margin: 38px 0 14px; border-top: 1px solid #303b4d; padding-top: 30px; }
 .section-head h2 { margin: 0 0 6px; padding: 0; }
 .section-head p { color: #aab7ca; margin: 0; max-width: 850px; }
@@ -80,15 +87,20 @@ button:focus-visible, a:focus-visible { outline: 3px solid #a9bdff !important; o
 .story { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 16px; margin: 20px 0; }
 .story-step { border-left: 2px solid #536992; padding: 4px 10px 8px 14px; }
 .story-step small { color: #a9bdff; font: .73rem ui-monospace, monospace; }
-.story-step strong { display: block; font-size: .95rem; margin: 8px 0; }
-.story-step p { margin: 0; color: #aab7ca; font-size: .82rem; line-height: 1.5; }
+.story-step strong { display: block; font-size: 1.05rem; font-weight: 700; margin: 8px 0; }
+.story-step p { margin: 0; color: #aab7ca; font-size: .875rem; line-height: 1.5; }
 .metric-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 12px; margin: 20px 0; }
 .evidence-metric { border: 1px solid #354155; border-radius: 10px; background: #161e2a; padding: 20px; min-width: 0; }
 .evidence-metric strong { display: block; font-size: clamp(1.5rem,2.7vw,2.3rem); color: #d5dfff; letter-spacing: -.04em; }
-.evidence-metric span { display: block; color: #becbde; margin-top: 6px; font-size: .86rem; }
+.evidence-metric span { display: block; color: #becbde; margin-top: 6px; font-size: .94rem; }
 .baseline { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px 20px; border: 1px solid #53627c; border-radius: 10px; padding: 18px 22px; margin-bottom: 14px; }
 .baseline strong { font-size: 1.8rem; color: #edf2fa; }
 .baseline p { color: #aab7ca; font-size: .85rem; margin: 0; flex-basis: 100%; }
+.detection-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; width: 100%; }
+.detection-pair > div { min-width: 0; }
+.detection-pair > div + div { border-left: 1px solid #53627c; padding-left: 24px; }
+.detection-pair span { display: block; color: #becbde; font-size: .94rem; }
+.detection-pair strong { display: block; margin-top: 4px; }
 .footer { border-top: 1px solid #354155; padding-top: 24px; margin-top: 40px; display: flex; flex-wrap: wrap; gap: 10px 25px; font-size: .8rem; color: #aab7ca; }
 .footer strong { color: #edf2fa; }
 @media(max-width: 900px) {
@@ -108,6 +120,10 @@ button:focus-visible, a:focus-visible { outline: 3px solid #a9bdff !important; o
   .hero h1 { font-size: 2.8rem; }
   .pattern { padding: 16px 18px; }
   .pattern-row { padding: 8px 0; }
+  .evidence-strip { grid-template-columns: 1fr; gap: 10px; }
+  .evidence-strip p { margin-top: 0; }
+  .detection-pair { gap: 12px; }
+  .detection-pair > div + div { padding-left: 12px; }
   .timeline { grid-template-columns: 1fr; gap: 18px; }
   .stage { padding: 17px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   .stage strong { margin: 0; }

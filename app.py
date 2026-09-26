@@ -6,7 +6,7 @@ import streamlit as st
 from demo.report import report_json
 from demo.runner import FIXTURE, ROOT, check_integrity, provenance, run_demo
 from demo.ui import badges, render_trace, timeline
-from evaluation.ui import render_controlled, render_summary
+from evaluation.ui import load_summary, render_controlled, render_evidence_strip, render_summary
 from ui.components import bob_story, footer, hero, journey, section
 from ui.theme import apply_theme
 
@@ -82,7 +82,7 @@ def failure_modes() -> None:
         ("Correct channel order. Incorrect value scale.", "Correct early stages. Incorrect mean and standard deviation."),
     ):
         with column, st.container(border=True):
-            st.caption("CONTROLLED EVALUATION")
+            st.markdown('<p class="supporting-note">CONTROLLED EVALUATION</p>', unsafe_allow_html=True)
             st.markdown("### " + title)
             st.write(description)
             st.button("Explore " + title.lower(), key="choose_" + scenario, on_click=select_scenario,
@@ -144,6 +144,8 @@ with primary:
     st.button("REPRODUCE HIDDEN BUG", key="run_before", type="primary", width="stretch", on_click=execute, args=("before",))
 with secondary:
     st.markdown('<a class="evidence-link" href="#evaluation-evidence" target="_self">EXPLORE EVIDENCE ↗</a>', unsafe_allow_html=True)
+evaluation_summary = load_summary()
+render_evidence_strip(evaluation_summary)
 if st.session_state.get("execution_error"):
     st.error(st.session_state["execution_error"])
 if st.session_state.get("scenario_selector", "historical_rgb_bgr") == "historical_rgb_bgr":
@@ -151,6 +153,6 @@ if st.session_state.get("scenario_selector", "historical_rgb_bgr") == "historica
 else:
     st.info("You're exploring a controlled evaluation below. Reproduce the hidden bug to return to the historical Bob story.")
 failure_modes()
-render_summary()
+render_summary(evaluation_summary)
 technical_evidence()
 footer()

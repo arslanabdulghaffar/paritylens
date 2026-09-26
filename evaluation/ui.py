@@ -15,7 +15,7 @@ from ui.components import section
 
 def render_controlled(scenario_id: str, contract: dict) -> None:
     scenario = get_scenario(scenario_id)
-    st.caption("Controlled evaluation scenario")
+    st.markdown('<p class="supporting-note">Controlled evaluation scenario</p>', unsafe_allow_html=True)
     st.subheader(scenario.title)
     st.write(scenario.description)
     fixtures = {item["id"]: item for item in load_manifest()["fixtures"]}
@@ -69,7 +69,7 @@ def render_controlled(scenario_id: str, contract: dict) -> None:
                          stage_key=f"evaluation_stage_{selection}")
     st.divider()
     st.subheader("Controlled result")
-    st.caption("Controlled ParityLens evaluation scenario. These runs are not historical repairs.")
+    st.markdown('<p class="supporting-note">Controlled ParityLens evaluation scenario. These runs are not historical repairs.</p>', unsafe_allow_html=True)
     if report:
         case = report["result"]
         if case["expectation_met"]:
@@ -89,8 +89,7 @@ def render_controlled(scenario_id: str, contract: dict) -> None:
         st.caption(f"Frozen contract v{contract['version']} · no Bob repair is claimed for this scenario")
 
 
-def render_summary() -> None:
-    section("Evidence at a glance", "Deterministic synthetic evaluation. Measured results, with their scope kept visible.", "evaluation-evidence")
+def load_summary() -> dict | None:
     try:
         suite = json.loads((ROOT / "evaluation/results.json").read_text(encoding="utf-8"))
         validate_suite(suite)
@@ -99,6 +98,30 @@ def render_summary() -> None:
             return
     except (OSError, ValueError, KeyError, TypeError):
         st.warning("Evaluation summary is unavailable. Generate it with python -m evaluation.runner.")
+        return
+    return suite
+
+
+def render_evidence_strip(suite: dict | None) -> None:
+    if suite is None:
+        return
+    metrics = suite["metrics"]
+    baseline = metrics["final_shape_dtype_baseline"]
+    items = (
+        ("ParityLens", f"{metrics['defects_detected']}/{metrics['defect_cases']}", "supported defects detected"),
+        ("Final shape/dtype-only baseline", f"{baseline['naive_defects_detected']}/{baseline['defective_cases']}", "detected"),
+        ("Clean controls", f"{metrics['clean_false_positives']}/{metrics['clean_cases']}", "false positives"),
+    )
+    st.markdown('<div class="evidence-strip">' + ''.join(
+        f'<div><span>{escape(label)}</span><p><strong>{escape(value)}</strong> {escape(detail)}</p></div>'
+        for label, value, detail in items) + '</div>'
+        '<p class="evidence-strip-note">Saved synthetic evaluation · the baseline checks final tensor structure, not all ML monitoring tools.</p>',
+        unsafe_allow_html=True)
+
+
+def render_summary(suite: dict | None) -> None:
+    section("Evidence at a glance", "Deterministic synthetic evaluation. Measured results, with their scope kept visible.", "evaluation-evidence")
+    if suite is None:
         return
     metrics = suite["metrics"]
     values = (
@@ -111,9 +134,10 @@ def render_summary() -> None:
         f'<div class="evidence-metric"><strong>{escape(value)}</strong><span>{escape(label)}</span></div>'
         for label, value in values) + '</div>', unsafe_allow_html=True)
     baseline = metrics["final_shape_dtype_baseline"]
-    st.markdown(f'<div class="baseline"><strong>{baseline["naive_defects_detected"]}/{baseline["defective_cases"]}</strong>'
-                '<span>Detected by the <b>final shape/dtype-only baseline</b></span>'
-                '<p>This baseline checks final tensor structure only. It does not represent all tests or ML monitoring tools.</p></div>', unsafe_allow_html=True)
+    st.markdown('<div class="baseline">'
+                f'<div class="detection-pair"><div><span>ParityLens detection</span><strong>{metrics["defects_detected"]}/{metrics["defect_cases"]}</strong></div>'
+                f'<div><span>Final shape/dtype-only baseline</span><strong>{baseline["naive_defects_detected"]}/{baseline["defective_cases"]}</strong></div></div>'
+                '<p>Supported defects detected on the same evaluated cases. The baseline checks final tensor structure only; it does not represent all tests or ML monitoring tools.</p></div>', unsafe_allow_html=True)
     st.write(f"**{metrics['cases_evaluated']} cases per run** · {suite['fixture_count']} synthetic images · "
              f"{len(suite['scenarios'])} scenarios · {metrics['reproducibility']['runs']} independent runs")
     st.caption(f"Supported classifications: {metrics['supported_classification']['correct']}/{metrics['supported_classification']['total']} · "

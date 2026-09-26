@@ -17,11 +17,11 @@ def hero() -> None:
     <p class="hero-subtitle">Find where the model's input changed. Then prove the repair.</p>
     <p class="hero-description">Stage-by-stage preprocessing parity for computer-vision pipelines.</p>
   </div>
-  <div class="pattern"><div class="pattern-title">Historical failure pattern</div>
+  <div class="pattern"><div class="pattern-title">Historical case summary</div>
     <div class="pattern-row"><span>SHAPE</span><span class="status-pass">PASS</span></div>
     <div class="pattern-row"><span>DTYPE</span><span class="status-pass">PASS</span></div>
     <div class="pattern-row"><span>SEMANTIC PARITY</span><span class="status-fail">FAIL</span></div>
-    <p class="pattern-note">The recorded RGB/BGR defect, illustrated.<br>These are not live results. Reproduce it below.</p>
+    <p class="pattern-note">Recorded RGB/BGR defect · not a live result.<br>Run the preserved historical candidate below to reproduce it.</p>
   </div>
 </div>
 """, unsafe_allow_html=True)
