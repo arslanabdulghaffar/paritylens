@@ -1,0 +1,16 @@
+{
+  "probe_coordinate": [
+    0,
+    0
+  ],
+  "probe_pixel_rgb": [
+    180,
+    120,
+    20
+  ],
+  "image_size": [
+    224,
+    224
+  ],
+  "r_minus_b_abs": 160
+}

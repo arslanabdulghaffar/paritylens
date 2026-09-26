@@ -1,0 +1,50 @@
+{
+  "version": "1.0",
+  "approved_by": "HUMAN",
+  "fixture": {
+    "size": [224, 224],
+    "format": "PNG",
+    "probe_pixel": {
+      "coordinate": [0, 0],
+      "comment": "Top-left pixel. R != G != B and |R - B| > 50 in uint8 space. Documented in fixture README."
+    }
+  },
+  "stages": {
+    "decode": {
+      "channel_order": "RGB",
+      "dtype": "uint8",
+      "layout": "HWC"
+    },
+    "geometry": {
+      "no_op": true
+    },
+    "scaling": {
+      "target_size": [224, 224],
+      "resample": "bilinear",
+      "divide_by": 255.0,
+      "value_range": [0.0, 1.0],
+      "dtype": "float32",
+      "layout": "HWC"
+    },
+    "normalization": {
+      "mean": [0.485, 0.456, 0.406],
+      "std": [0.229, 0.224, 0.225],
+      "channel_order": "RGB",
+      "internal_precision": "float64",
+      "output_dtype": "float32",
+      "layout": "HWC"
+    },
+    "model_input": {
+      "shape": [3, 224, 224],
+      "dtype": "float32",
+      "layout": "CHW",
+      "channel_order": "RGB"
+    }
+  },
+  "comparison": {
+    "atol": 1e-5,
+    "rtol": 1e-5,
+    "enforce_channel_order": true,
+    "comparator_policy": "compare_recorded_arrays_as_is__no_channel_reorder__no_value_transform"
+  }
+}
