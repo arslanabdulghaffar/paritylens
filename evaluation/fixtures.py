@@ -1,5 +1,6 @@
 import hashlib
 import json
+import re
 from pathlib import Path
 
 import numpy as np
@@ -56,7 +57,19 @@ def generate(directory: Path = FIXTURE_DIR) -> dict:
 
 
 def load_manifest(directory: Path = FIXTURE_DIR) -> dict:
-    return json.loads((directory / "metadata.json").read_text(encoding="utf-8"))
+    manifest = json.loads((directory / "metadata.json").read_text(encoding="utf-8"))
+    expected = {f"{pattern}_{variant}" for pattern in PATTERNS for variant in range(1, 4)}
+    entries = manifest["fixtures"]
+    if len(entries) != len(expected) or {item["id"] for item in entries} != expected:
+        raise ValueError("Unsupported or duplicate fixture entries")
+    for item in entries:
+        if item["filename"] != item["id"] + ".png":
+            raise ValueError("Unsafe evaluation fixture filename")
+        if (directory / item["filename"]).resolve().parent != directory.resolve():
+            raise ValueError("Evaluation fixture escapes its directory")
+        if not re.fullmatch(r"[0-9a-f]{64}", item["sha256"]):
+            raise ValueError("Invalid evaluation fixture hash")
+    return manifest
 
 
 if __name__ == "__main__":

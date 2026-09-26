@@ -1,0 +1,118 @@
+{
+  "baseline_commit": "5229d39cffa510ca0930e88839e54fbe50cc409f",
+  "policy": "sha256 is byte-exact baseline; portable_sha256 only normalizes CRLF to LF for text except the exact historical snapshot.",
+  "files": {
+    "AGENTS.md": {
+      "sha256": "7b5bf362c0154d3a122cffc2cfae3980e63d54367d41cfb7c78afd775833784b",
+      "portable_sha256": "7b5bf362c0154d3a122cffc2cfae3980e63d54367d41cfb7c78afd775833784b"
+    },
+    "bob_sessions/index.md": {
+      "sha256": "f3e3df00f4a8b86d870bda519c20aebb2906a05c879a33592986ec1e264eedf4",
+      "portable_sha256": "6897dff6e8ce6c3fb15827eb0bae427328505311bfa2fa0d6d5cbb068e110662"
+    },
+    "bob_sessions/neuralfoundry_task01_session_summary.png": {
+      "sha256": "d22c14ccbf905d4277cc3d1e53aade4f9db13b92bb3f6343dfb4b55425c748f9",
+      "portable_sha256": "d22c14ccbf905d4277cc3d1e53aade4f9db13b92bb3f6343dfb4b55425c748f9"
+    },
+    "bob_sessions/neuralfoundry_task02_session_summary.png": {
+      "sha256": "1b9762389f15d758d8a155a3c2b88a42bb2268cbb841f71c07fedee294a4aba8",
+      "portable_sha256": "1b9762389f15d758d8a155a3c2b88a42bb2268cbb841f71c07fedee294a4aba8"
+    },
+    "bob_sessions/neuralfoundry_task03_session_summary.png": {
+      "sha256": "b9e184a548a5b21b8ad7e074aec309bd84a76f452b2fa7b4722c2e23acaafdec",
+      "portable_sha256": "b9e184a548a5b21b8ad7e074aec309bd84a76f452b2fa7b4722c2e23acaafdec"
+    },
+    "bob_sessions/neuralfoundry_task04_session_summary.png": {
+      "sha256": "6400930542d34faa08f975a13e96867ae7ff32c358e265b307117810598e2687",
+      "portable_sha256": "6400930542d34faa08f975a13e96867ae7ff32c358e265b307117810598e2687"
+    },
+    "contract/preprocessing_contract.json": {
+      "sha256": "bf80be7de805269a4e1ac2c8665369d2f3dd070fd42461083c71a8e0755de736",
+      "portable_sha256": "bf80be7de805269a4e1ac2c8665369d2f3dd070fd42461083c71a8e0755de736"
+    },
+    "demo/candidate_before_bob.py": {
+      "sha256": "8f280f3a0b36c39e86ab964676afa3329296e8cd00ae6dfd426ca17cd0eae94d",
+      "portable_sha256": "8f280f3a0b36c39e86ab964676afa3329296e8cd00ae6dfd426ca17cd0eae94d"
+    },
+    "demo/provenance.json": {
+      "sha256": "cc8814a79969e6a0a0756c87be6be8e7795036f4759966837af5d26f718d0a8e",
+      "portable_sha256": "481fed3f186541641ca26755b5072aa98e6e687359d76921f41c0d5c0af59f25"
+    },
+    "evidence/candidate/decode.npy": {
+      "sha256": "e40afc5b7b8242b858cec53c8d71ec45c4dc6e9fe23ff2ae6e062d9405e496f7",
+      "portable_sha256": "e40afc5b7b8242b858cec53c8d71ec45c4dc6e9fe23ff2ae6e062d9405e496f7"
+    },
+    "evidence/candidate/geometry.npy": {
+      "sha256": "e40afc5b7b8242b858cec53c8d71ec45c4dc6e9fe23ff2ae6e062d9405e496f7",
+      "portable_sha256": "e40afc5b7b8242b858cec53c8d71ec45c4dc6e9fe23ff2ae6e062d9405e496f7"
+    },
+    "evidence/candidate/model_input.npy": {
+      "sha256": "7dbb9f9e10651919389335d99c80674cd75652c35becbc606fe46f4d1fc1107c",
+      "portable_sha256": "7dbb9f9e10651919389335d99c80674cd75652c35becbc606fe46f4d1fc1107c"
+    },
+    "evidence/candidate/normalization.npy": {
+      "sha256": "40cd808a15f8d3ac04bdad8f5c2bf0064cf82f136ad836d5552f4faa300503a4",
+      "portable_sha256": "40cd808a15f8d3ac04bdad8f5c2bf0064cf82f136ad836d5552f4faa300503a4"
+    },
+    "evidence/candidate/scaling.npy": {
+      "sha256": "5becfb01eeacd90d29796f9275c9b7e47dccc93ab8d9a92f647ff3dcafbd7159",
+      "portable_sha256": "5becfb01eeacd90d29796f9275c9b7e47dccc93ab8d9a92f647ff3dcafbd7159"
+    },
+    "evidence/reference/decode.npy": {
+      "sha256": "e40afc5b7b8242b858cec53c8d71ec45c4dc6e9fe23ff2ae6e062d9405e496f7",
+      "portable_sha256": "e40afc5b7b8242b858cec53c8d71ec45c4dc6e9fe23ff2ae6e062d9405e496f7"
+    },
+    "evidence/reference/geometry.npy": {
+      "sha256": "e40afc5b7b8242b858cec53c8d71ec45c4dc6e9fe23ff2ae6e062d9405e496f7",
+      "portable_sha256": "e40afc5b7b8242b858cec53c8d71ec45c4dc6e9fe23ff2ae6e062d9405e496f7"
+    },
+    "evidence/reference/model_input.npy": {
+      "sha256": "7dbb9f9e10651919389335d99c80674cd75652c35becbc606fe46f4d1fc1107c",
+      "portable_sha256": "7dbb9f9e10651919389335d99c80674cd75652c35becbc606fe46f4d1fc1107c"
+    },
+    "evidence/reference/normalization.npy": {
+      "sha256": "40cd808a15f8d3ac04bdad8f5c2bf0064cf82f136ad836d5552f4faa300503a4",
+      "portable_sha256": "40cd808a15f8d3ac04bdad8f5c2bf0064cf82f136ad836d5552f4faa300503a4"
+    },
+    "evidence/reference/scaling.npy": {
+      "sha256": "5becfb01eeacd90d29796f9275c9b7e47dccc93ab8d9a92f647ff3dcafbd7159",
+      "portable_sha256": "5becfb01eeacd90d29796f9275c9b7e47dccc93ab8d9a92f647ff3dcafbd7159"
+    },
+    "fixtures/control_clean.png": {
+      "sha256": "4a7175c78523481277255ac8e0a2a66c9a0571b97269294a8b475fa376b160f0",
+      "portable_sha256": "4a7175c78523481277255ac8e0a2a66c9a0571b97269294a8b475fa376b160f0"
+    },
+    "fixtures/defect_rgb_bgr.png": {
+      "sha256": "4a7175c78523481277255ac8e0a2a66c9a0571b97269294a8b475fa376b160f0",
+      "portable_sha256": "4a7175c78523481277255ac8e0a2a66c9a0571b97269294a8b475fa376b160f0"
+    },
+    "fixtures/fixture_metadata.json": {
+      "sha256": "5f260883ed3d0dd0890925299ae05f308fa64e44c16f2ea6b284f782fc6f7f7c",
+      "portable_sha256": "6d0a30ac85bd3d013924f33713884e61b97c8b92fa6479a4ce78bb148d182c43"
+    },
+    "fixtures/generate_fixtures.py": {
+      "sha256": "cf3fdff54e9dec10a4bbaced5e1454711252007a7ba044bd4da4207b6f7b20bf",
+      "portable_sha256": "cf3fdff54e9dec10a4bbaced5e1454711252007a7ba044bd4da4207b6f7b20bf"
+    },
+    "paritylens-plan.md": {
+      "sha256": "a47fe118cdbcbf6f28e5c8a42498c437b48322f3bbd62c5e4a23fc5d7b4e8914",
+      "portable_sha256": "a47fe118cdbcbf6f28e5c8a42498c437b48322f3bbd62c5e4a23fc5d7b4e8914"
+    },
+    "paritylens/comparator.py": {
+      "sha256": "f9fb92aca1089386b2b5eb0c3a6042a3692d707fc1a7ec3b16591e7801ef5bfd",
+      "portable_sha256": "f9fb92aca1089386b2b5eb0c3a6042a3692d707fc1a7ec3b16591e7801ef5bfd"
+    },
+    "paritylens/pipelines/candidate.py": {
+      "sha256": "8bc4018d5fdf58afe278c123f8a11457c27001822ff1dfc9742aabc3554f8d8d",
+      "portable_sha256": "8bc4018d5fdf58afe278c123f8a11457c27001822ff1dfc9742aabc3554f8d8d"
+    },
+    "paritylens/pipelines/reference.py": {
+      "sha256": "0178acb0a9a5577bf655064c434f3a8af26cbba22cb7d4a33754e44b73d85d91",
+      "portable_sha256": "0178acb0a9a5577bf655064c434f3a8af26cbba22cb7d4a33754e44b73d85d91"
+    },
+    "paritylens/verifier.py": {
+      "sha256": "2242dd776638b055aa6fe202cd504a68c708b5adcb8422e419681f71fa6c0313",
+      "portable_sha256": "2242dd776638b055aa6fe202cd504a68c708b5adcb8422e419681f71fa6c0313"
+    }
+  }
+}

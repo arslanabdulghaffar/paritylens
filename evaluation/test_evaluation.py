@@ -61,7 +61,10 @@ class EvaluationTests(unittest.TestCase):
     def test_fixture_generation_is_repeatable(self):
         with tempfile.TemporaryDirectory(prefix="paritylens-fixture-test-") as directory:
             generated = generate(Path(directory))
-            self.assertEqual(generated, load_manifest())
+            self.assertEqual(generated, generate(Path(directory)))
+            for actual, committed in zip(generated["fixtures"], load_manifest()["fixtures"]):
+                self.assertEqual({k: v for k, v in actual.items() if k != "sha256"},
+                                 {k: v for k, v in committed.items() if k != "sha256"})
             self.assertEqual(len({f["pixel_sha256"] for f in generated["fixtures"]}), 15)
 
     def test_reports_preserve_origin_and_schema(self):

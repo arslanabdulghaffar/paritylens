@@ -11,6 +11,9 @@ Clean controls passed: 15/15.
 Clean false positives: 0.
 Reproducible: True.
 
+Final shape/dtype baseline detects 0/45 defects; ParityLens detects 45/45.
+This baseline represents only final tensor shape and dtype checks.
+
 | Scenario | Fixture | Expected boundary | Observed boundary | Class | Parity |
 |---|---|---|---|---|---|
 | historical_rgb_bgr | gradients_1.png | decode | decode | channel_order_mismatch | FAIL |

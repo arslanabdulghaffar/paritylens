@@ -1,0 +1,61 @@
+{
+  "generated_at": "2026-09-26T17:55:52.242537+00:00",
+  "passed": true,
+  "checks": [
+    {
+      "check": "Protected integrity and Bob evidence",
+      "passed": true,
+      "detail": "32 portable integrity checks; original snapshot remains byte-exact"
+    },
+    {
+      "check": "Required project files",
+      "passed": true,
+      "detail": "13 required files present"
+    },
+    {
+      "check": "Historical BEFORE",
+      "passed": true,
+      "detail": "decode / channel_order_mismatch; shape and dtype PASS"
+    },
+    {
+      "check": "Bob-repaired AFTER",
+      "passed": true,
+      "detail": "Normal --verify CLI: all five stages PASS"
+    },
+    {
+      "check": "Full controlled matrix and reproducibility",
+      "passed": true,
+      "detail": "60 cases twice; scaling/normalization localized; clean controls PASS"
+    },
+    {
+      "check": "Evaluation and benchmark artifact consistency",
+      "passed": true,
+      "detail": "Stored evaluation matches fresh cases and baseline; benchmark inputs current"
+    },
+    {
+      "check": "Evidence exports",
+      "passed": true,
+      "detail": "Historical and all scenario reports serialize with correct origins"
+    },
+    {
+      "check": "Automated tests including Streamlit",
+      "passed": true,
+      "detail": "Ran 20 tests in 17.476s / OK"
+    },
+    {
+      "check": "Headless Streamlit startup",
+      "passed": true,
+      "detail": {
+        "headless_startup": "PASS",
+        "health_http": 200,
+        "page_http": 200,
+        "scope": "Local server startup/health only; Streamlit AppTest separately covers executed UI scenarios."
+      }
+    },
+    {
+      "check": "Post-execution protected integrity",
+      "passed": true,
+      "detail": "32 portable integrity checks; original snapshot remains byte-exact"
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows",
+    "numpy": "2.5.3",
+    "pillow": "12.3.0",
+    "streamlit": "1.64.0",
+    "opencv": "5.0.0"
+  },
+  "installation": "New Python venv; pip install -r requirements.txt only; system site packages disabled.",
+  "checks": [
+    {
+      "check": "import numpy, PIL, cv2, streamlit; print(\"imports PASS\")",
+      "exit_code": 0,
+      "output": "imports PASS"
+    },
+    {
+      "check": "check",
+      "exit_code": 0,
+      "output": "No broken requirements found."
+    },
+    {
+      "check": "core normal",
+      "exit_code": 0,
+      "output": "ParityLens - defect detection run\nFixture: fixtures\\defect_rgb_bgr.png\n\n  stage=decode          PASS\n  stage=geometry        PASS\n  stage=scaling         PASS\n  stage=normalization   PASS\n  stage=model_input     PASS\n\nPASS  all stages"
+    },
+    {
+      "check": "core verify",
+      "exit_code": 0,
+      "output": "ParityLens - verify mode\nFixture: fixtures\\defect_rgb_bgr.png\n\n  stage=decode          PASS\n  stage=geometry        PASS\n  stage=scaling         PASS\n  stage=normalization   PASS\n  stage=model_input     PASS\n\nPASS  all stages"
+    }
+  ],
+  "evaluation_metrics": {
+    "cases_evaluated": 60,
+    "defect_cases": 45,
+    "clean_cases": 15,
+    "clean_controls_passed": 15,
+    "defects_detected": 45,
+    "boundary_localization": {
+      "correct": 45,
+      "total": 45,
+      "accuracy": 1.0
+    },
+    "supported_classification": {
+      "correct": 45,
+      "total": 45,
+      "accuracy": 1.0
+    },
+    "clean_false_positives": 0,
+    "expectations_met": 60,
+    "final_shape_dtype_baseline": {
+      "name": "Final shape/dtype baseline",
+      "defective_cases": 45,
+      "naive_defects_detected": 0,
+      "paritylens_defects_detected": 45,
+      "naive_clean_false_positives": 0,
+      "scope": "Only final tensor shape and dtype; not a comparison with general ML monitoring systems."
+    },
+    "reproducibility": {
+      "runs": 2,
+      "matched": true,
+      "first_digest": "ec1ec88cb82a616f57ae99f0ab6f00caa1e79d360d1458c82ba92ba6b0d5e191",
+      "second_digest": "ec1ec88cb82a616f57ae99f0ab6f00caa1e79d360d1458c82ba92ba6b0d5e191"
+    }
+  },
+  "test_and_startup_evidence": "PREFLIGHT.json",
+  "scope": "Fresh Windows virtual environment; no Linux or hosted deployment claim."
+}

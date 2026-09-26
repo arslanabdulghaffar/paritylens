@@ -89,6 +89,31 @@ python -m evaluation.fixtures
 python -m unittest discover -v
 ```
 
+## Engineering validation
+
+```bash
+# Read-only one-command validation, including tests and headless startup
+python scripts/preflight.py
+
+# Byte-exact frozen artifacts; use --portable for CRLF/LF checkout differences
+python -m integrity.check_integrity
+
+# Local warmup/repeated benchmark, stored separately from semantic results
+python -m evaluation.benchmark
+```
+
+The measured 60-case matrix detects 45/45 defects, localizes 45/45 first
+boundaries, classifies 45/45 supported cases, and passes all 15 clean controls.
+On those same executed cases, the **final shape/dtype baseline** detects 0/45
+defects. This baseline represents only final tensor shape and dtype checks,
+not all conventional ML monitoring. Two runs match, including recorded-array hashes.
+
+See [technical validation](docs/VALIDATION.md) for measured timings, environment,
+adversarial tests, and limitations; [architecture](docs/ARCHITECTURE.md),
+[security review](docs/SECURITY.md), [deployment preflight](docs/DEPLOYMENT.md),
+[demo script](docs/DEMO_SCRIPT.md), and [submission facts](docs/SUBMISSION_FACTS.md)
+provide the final review material. CI is prepared but has not been run remotely.
+
 The set has 15 RGB PNGs spanning gradients, blocks, checkers, intensity regions,
 and seeded noise. Generation metadata, probe values, and hashes are stored in
 `evaluation/fixtures/metadata.json`. Probes deliberately satisfy the frozen

@@ -62,6 +62,7 @@ def run_demo(mode: str) -> dict:
             shutil.copyfile(ROOT / "demo" / name, workspace / "demo" / name)
         if not all(check_integrity(workspace).values()):
             raise RuntimeError("Isolated copy failed the source integrity check.")
+        (workspace / ".demo-workspace").touch()
         process = subprocess.run(
             [sys.executable, "-B", "-m", "demo.worker", mode],
             cwd=workspace, capture_output=True, text=True, encoding="utf-8",

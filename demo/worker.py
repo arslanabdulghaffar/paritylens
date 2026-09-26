@@ -11,6 +11,8 @@ from demo.report import stage_details
 
 
 def main() -> int:
+    if not Path(".demo-workspace").is_file() or Path.cwd().resolve() != Path(__file__).resolve().parents[1]:
+        raise ValueError("Demo execution requires an isolated workspace")
     mode = sys.argv[1]
     if mode not in {"before", "after"}:
         raise ValueError("Unsupported demo mode")
@@ -65,4 +67,8 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    try:
+        raise SystemExit(main())
+    except (ValueError, OSError, AssertionError) as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        raise SystemExit(2)

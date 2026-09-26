@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "project": "ParityLens",
   "evaluation": "Deterministic synthetic evaluation",
-  "generated_at": "2026-09-26T14:34:33.979001+00:00",
+  "generated_at": "2026-09-26T17:53:15.414152+00:00",
   "fixture_set": "synthetic-v1",
   "fixture_count": 15,
   "scenarios": [
@@ -75,15 +75,19 @@
       "paritylens/verifier.py": "2242dd776638b055aa6fe202cd504a68c708b5adcb8422e419681f71fa6c0313",
       "demo/candidate_before_bob.py": "8f280f3a0b36c39e86ab964676afa3329296e8cd00ae6dfd426ca17cd0eae94d",
       "demo/report.py": "d973301303072d3ca7caa9fe5629a1d2a16f7e0bec34636836b669335d82cd06",
+      "demo/runner.py": "a478aeafe5a5648e1a0281ec322c1b109058911ad35ac61d55141bc8fdace64f",
+      "demo/worker.py": "90c9eea4c59168c1fa90c203214a1d31858483f2c7dfd681f7e02bb7753c6078",
       "evaluation/__init__.py": "c0549c254d6973b20835ba1620d29bbf7cc318c81f817bec446118b4c49447d6",
       "evaluation/adapter.py": "ef343b58b02fd4a09d567d290ca3c80657e9b51a70f8d1592fe40beac773c5df",
+      "evaluation/baseline.py": "d99ad119903ec26351128a66304bf2e6fccba90f1630b643f330896efbc4d322",
       "evaluation/candidates.py": "36b4c668b9743594b0d2537f4ee5d8aa794572d18b646b1da83e5c4cd901ad9b",
-      "evaluation/fixtures.py": "09bf8c7ee31eaff1af7a99db08a1eebcd1958ea8e4796f849bc8844c0f4377cf",
-      "evaluation/metrics.py": "f792cf42d6cb51b3d631d59954746f0d9d36f2c72984929f5207cb1c88388d23",
-      "evaluation/report.py": "7e11f0ba4d03e3902be53605b1cd6e9dc01bbd80b7ab7a6c6829b972f1720a56",
-      "evaluation/runner.py": "cec3c53d68036e1018d591826fbd9ee9d72cd5c0ed3ef0570dc9e5652e57f19b",
+      "evaluation/fixtures.py": "5dfe343c74d9e38923ca622efc513352c9ae8ce3d05020febe58548d0fe110c1",
+      "evaluation/metrics.py": "16a251e2d0354f091d74226b2877935e64de97a3d7508d58ba0583d664cdd40b",
+      "evaluation/report.py": "a409a45580511933850b69cd49f2cca8039c3fe2e9892d6e0ae9295e00e33b5f",
+      "evaluation/runner.py": "7dbc2e4702d1f4a328fbaf57e8c3cdd24fa4ff0af6c26143ad9dad0eab9908b7",
       "evaluation/scenarios.py": "8a1afc1cdd372ad2029bf1ff29dc30e58ffedd527ac787798a46d0be57c824d3",
-      "evaluation/worker.py": "f812f83864437c74972568ab9fe49e70ba643697baba2d527f1da5b945ef65cc",
+      "evaluation/worker.py": "17da62ced2757605478f7f592e0afb5dd7051cff3c06aacb99b6e97f9f0c19d3",
+      "evaluation/benchmark_worker.py": "158141e44b19326003d236f4b8b839aa14681144bdae0f64ce303a40329665d4",
       "evaluation/fixtures/metadata.json": "f4ee214042a1592a7022c1eda5d819c5fa81c68d4a445f0935340d996b24005c",
       "evaluation/fixtures/gradients_1.png": "32bf49e6aa1a7b5022ed64a6394ba633747feef5dcb97e2dd6392995759296bc",
       "evaluation/fixtures/gradients_2.png": "2f1816f041eef0e2944015fc2a6cd6512a79e049e807f47ff989f50a7d8983bc",
@@ -128,11 +132,19 @@
     },
     "clean_false_positives": 0,
     "expectations_met": 60,
+    "final_shape_dtype_baseline": {
+      "name": "Final shape/dtype baseline",
+      "defective_cases": 45,
+      "naive_defects_detected": 0,
+      "paritylens_defects_detected": 45,
+      "naive_clean_false_positives": 0,
+      "scope": "Only final tensor shape and dtype; not a comparison with general ML monitoring systems."
+    },
     "reproducibility": {
       "runs": 2,
       "matched": true,
-      "first_digest": "39126108c4f1a637cbafb495dfccdee0ef447b484257bf183ea38bfeffe5e6be",
-      "second_digest": "39126108c4f1a637cbafb495dfccdee0ef447b484257bf183ea38bfeffe5e6be"
+      "first_digest": "ec1ec88cb82a616f57ae99f0ab6f00caa1e79d360d1458c82ba92ba6b0d5e191",
+      "second_digest": "ec1ec88cb82a616f57ae99f0ab6f00caa1e79d360d1458c82ba92ba6b0d5e191"
     }
   },
   "cases": [
@@ -327,6 +339,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "15b392eaf15be3959b8bc883fe7e611c0a1d462b1502877944da0825fca828fc",
         "candidate/geometry.npy": "15b392eaf15be3959b8bc883fe7e611c0a1d462b1502877944da0825fca828fc",
@@ -531,6 +562,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "6bea5304657c93a747c4093f78ed760ce409cae006841ce221042c552d84cddc",
         "candidate/geometry.npy": "6bea5304657c93a747c4093f78ed760ce409cae006841ce221042c552d84cddc",
@@ -735,6 +785,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "015fa8bbd751452bba6dc3fe60ab3dab1a017d9efeff774f77b3e18ec74f93b7",
         "candidate/geometry.npy": "015fa8bbd751452bba6dc3fe60ab3dab1a017d9efeff774f77b3e18ec74f93b7",
@@ -939,6 +1008,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "40111c476cba12d4ec63876a64eb18956c1293a4482c0788b3e0832a653a8cbe",
         "candidate/geometry.npy": "40111c476cba12d4ec63876a64eb18956c1293a4482c0788b3e0832a653a8cbe",
@@ -1143,6 +1231,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "1ab8f40f54b331a532647b8b40b30bf53c5db01d0bc4eeecabde5a771282988b",
         "candidate/geometry.npy": "1ab8f40f54b331a532647b8b40b30bf53c5db01d0bc4eeecabde5a771282988b",
@@ -1347,6 +1454,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "4e94b57e56a3ea393e629b69de1547fade3c44a5809369121d7f24c363bb9d15",
         "candidate/geometry.npy": "4e94b57e56a3ea393e629b69de1547fade3c44a5809369121d7f24c363bb9d15",
@@ -1551,6 +1677,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "410e72f77dd8936933b150263271b3f430a74d945ad25828b623d5548f95dcf2",
         "candidate/geometry.npy": "410e72f77dd8936933b150263271b3f430a74d945ad25828b623d5548f95dcf2",
@@ -1755,6 +1900,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "4f85735199fb2d412ab59f043a544b1a1d5261fec406f13e60fb87737c65d90a",
         "candidate/geometry.npy": "4f85735199fb2d412ab59f043a544b1a1d5261fec406f13e60fb87737c65d90a",
@@ -1959,6 +2123,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "b90f0856c8cd0949097483795d93c7bd15996fe38110eb03dd3f259cb3332468",
         "candidate/geometry.npy": "b90f0856c8cd0949097483795d93c7bd15996fe38110eb03dd3f259cb3332468",
@@ -2163,6 +2346,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "623721ab747b4d0b57eba932cd9a959e39863bbed437495eea1467d176257d78",
         "candidate/geometry.npy": "623721ab747b4d0b57eba932cd9a959e39863bbed437495eea1467d176257d78",
@@ -2367,6 +2569,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "19f25f4c900ed84ba12fb746e57d7c8b7580e263c0a79841b227ffe9f1eb569b",
         "candidate/geometry.npy": "19f25f4c900ed84ba12fb746e57d7c8b7580e263c0a79841b227ffe9f1eb569b",
@@ -2571,6 +2792,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "b7e6b462155f8112035f3657841ea8664663e1dde2ec4d5d13ab1e88a1c2e4f9",
         "candidate/geometry.npy": "b7e6b462155f8112035f3657841ea8664663e1dde2ec4d5d13ab1e88a1c2e4f9",
@@ -2775,6 +3015,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "68c1d7434ac3cdf3026adfedfcf1e3acfac0e6314d05eede2490cc04d649b7ec",
         "candidate/geometry.npy": "68c1d7434ac3cdf3026adfedfcf1e3acfac0e6314d05eede2490cc04d649b7ec",
@@ -2979,6 +3238,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "7f53f073c11f0cfcf4a06cc035063be7acd6b50df0d3b4b87642b944a5e182a9",
         "candidate/geometry.npy": "7f53f073c11f0cfcf4a06cc035063be7acd6b50df0d3b4b87642b944a5e182a9",
@@ -3183,6 +3461,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "bea716b21ded241a83310aa2ed97b84e7abf19175363e2f558ecfcf1025ff9ca",
         "candidate/geometry.npy": "bea716b21ded241a83310aa2ed97b84e7abf19175363e2f558ecfcf1025ff9ca",
@@ -3387,6 +3684,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "ee481361d41278110ea3ebbd342d66f4d0d5c9bfdc92ac9e6663df80a7b1f770",
         "candidate/geometry.npy": "ee481361d41278110ea3ebbd342d66f4d0d5c9bfdc92ac9e6663df80a7b1f770",
@@ -3591,6 +3907,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "a2f00c66a487969934f0504a3d0c5113f6dc30dafefd1dcb8fce038823e76360",
         "candidate/geometry.npy": "a2f00c66a487969934f0504a3d0c5113f6dc30dafefd1dcb8fce038823e76360",
@@ -3795,6 +4130,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "ff60db197ad2247c7b0e5514fd3afb7d04f874d68a56151d18dab77750942ae2",
         "candidate/geometry.npy": "ff60db197ad2247c7b0e5514fd3afb7d04f874d68a56151d18dab77750942ae2",
@@ -3999,6 +4353,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "852e0c44252a4677a2527457c580aceb189a98138f21310b4054c64fb94643c7",
         "candidate/geometry.npy": "852e0c44252a4677a2527457c580aceb189a98138f21310b4054c64fb94643c7",
@@ -4203,6 +4576,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "8ed9fc13625d8279fba2a7a848eba575b00ae0596e54a330a6769db5028b5f87",
         "candidate/geometry.npy": "8ed9fc13625d8279fba2a7a848eba575b00ae0596e54a330a6769db5028b5f87",
@@ -4407,6 +4799,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "b9798874bb328578f1712c1df41116e02584b8c446a5f255745611cf10e8eaee",
         "candidate/geometry.npy": "b9798874bb328578f1712c1df41116e02584b8c446a5f255745611cf10e8eaee",
@@ -4611,6 +5022,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "ab35adbf81571c707522eafeef4845053ee1aa21d010e3136472b70f4af0b917",
         "candidate/geometry.npy": "ab35adbf81571c707522eafeef4845053ee1aa21d010e3136472b70f4af0b917",
@@ -4815,6 +5245,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "b0f9dbf041433af80a78f3e59edf69b63cc6e2687611eb32e8411f8a4a134bde",
         "candidate/geometry.npy": "b0f9dbf041433af80a78f3e59edf69b63cc6e2687611eb32e8411f8a4a134bde",
@@ -5019,6 +5468,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "e79e7c6c9f92cc3d3d00617a8fcc34b654ac5d74b5c447aec3b9126e45e9302e",
         "candidate/geometry.npy": "e79e7c6c9f92cc3d3d00617a8fcc34b654ac5d74b5c447aec3b9126e45e9302e",
@@ -5223,6 +5691,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "7cef4c0ec002542a5a7a5b121f184a4759ab7f13c5e66f1a0a09fe20e7c6c99f",
         "candidate/geometry.npy": "7cef4c0ec002542a5a7a5b121f184a4759ab7f13c5e66f1a0a09fe20e7c6c99f",
@@ -5427,6 +5914,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "e2c2f4dfe446a3c70e9f598d8ed6454108cfe1b0f4626a09ffa81f70056c8a8e",
         "candidate/geometry.npy": "e2c2f4dfe446a3c70e9f598d8ed6454108cfe1b0f4626a09ffa81f70056c8a8e",
@@ -5631,6 +6137,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "8fe6e336a6d5ff43361862df7e46794c5b5a2ace6ee17f12212773bbed8b632a",
         "candidate/geometry.npy": "8fe6e336a6d5ff43361862df7e46794c5b5a2ace6ee17f12212773bbed8b632a",
@@ -5835,6 +6360,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "548077dcc973840d17019aea4d10f4332128fe9b0fec985b5626cedce3aaccd7",
         "candidate/geometry.npy": "548077dcc973840d17019aea4d10f4332128fe9b0fec985b5626cedce3aaccd7",
@@ -6039,6 +6583,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "8d460a79e11fd988f291e4dbb059be2f02ad02f0db532b81e4d56cd0399f194c",
         "candidate/geometry.npy": "8d460a79e11fd988f291e4dbb059be2f02ad02f0db532b81e4d56cd0399f194c",
@@ -6243,6 +6806,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "f8fbd0a41cbe8204514906ad17ea36b4fd9d0dc108978c779ddf73e662dd120d",
         "candidate/geometry.npy": "f8fbd0a41cbe8204514906ad17ea36b4fd9d0dc108978c779ddf73e662dd120d",
@@ -6447,6 +7029,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "ee481361d41278110ea3ebbd342d66f4d0d5c9bfdc92ac9e6663df80a7b1f770",
         "candidate/geometry.npy": "ee481361d41278110ea3ebbd342d66f4d0d5c9bfdc92ac9e6663df80a7b1f770",
@@ -6651,6 +7252,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "a2f00c66a487969934f0504a3d0c5113f6dc30dafefd1dcb8fce038823e76360",
         "candidate/geometry.npy": "a2f00c66a487969934f0504a3d0c5113f6dc30dafefd1dcb8fce038823e76360",
@@ -6855,6 +7475,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "ff60db197ad2247c7b0e5514fd3afb7d04f874d68a56151d18dab77750942ae2",
         "candidate/geometry.npy": "ff60db197ad2247c7b0e5514fd3afb7d04f874d68a56151d18dab77750942ae2",
@@ -7059,6 +7698,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "852e0c44252a4677a2527457c580aceb189a98138f21310b4054c64fb94643c7",
         "candidate/geometry.npy": "852e0c44252a4677a2527457c580aceb189a98138f21310b4054c64fb94643c7",
@@ -7263,6 +7921,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "8ed9fc13625d8279fba2a7a848eba575b00ae0596e54a330a6769db5028b5f87",
         "candidate/geometry.npy": "8ed9fc13625d8279fba2a7a848eba575b00ae0596e54a330a6769db5028b5f87",
@@ -7467,6 +8144,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "b9798874bb328578f1712c1df41116e02584b8c446a5f255745611cf10e8eaee",
         "candidate/geometry.npy": "b9798874bb328578f1712c1df41116e02584b8c446a5f255745611cf10e8eaee",
@@ -7671,6 +8367,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "ab35adbf81571c707522eafeef4845053ee1aa21d010e3136472b70f4af0b917",
         "candidate/geometry.npy": "ab35adbf81571c707522eafeef4845053ee1aa21d010e3136472b70f4af0b917",
@@ -7875,6 +8590,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "b0f9dbf041433af80a78f3e59edf69b63cc6e2687611eb32e8411f8a4a134bde",
         "candidate/geometry.npy": "b0f9dbf041433af80a78f3e59edf69b63cc6e2687611eb32e8411f8a4a134bde",
@@ -8079,6 +8813,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "e79e7c6c9f92cc3d3d00617a8fcc34b654ac5d74b5c447aec3b9126e45e9302e",
         "candidate/geometry.npy": "e79e7c6c9f92cc3d3d00617a8fcc34b654ac5d74b5c447aec3b9126e45e9302e",
@@ -8283,6 +9036,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "7cef4c0ec002542a5a7a5b121f184a4759ab7f13c5e66f1a0a09fe20e7c6c99f",
         "candidate/geometry.npy": "7cef4c0ec002542a5a7a5b121f184a4759ab7f13c5e66f1a0a09fe20e7c6c99f",
@@ -8487,6 +9259,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "e2c2f4dfe446a3c70e9f598d8ed6454108cfe1b0f4626a09ffa81f70056c8a8e",
         "candidate/geometry.npy": "e2c2f4dfe446a3c70e9f598d8ed6454108cfe1b0f4626a09ffa81f70056c8a8e",
@@ -8691,6 +9482,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "8fe6e336a6d5ff43361862df7e46794c5b5a2ace6ee17f12212773bbed8b632a",
         "candidate/geometry.npy": "8fe6e336a6d5ff43361862df7e46794c5b5a2ace6ee17f12212773bbed8b632a",
@@ -8895,6 +9705,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "548077dcc973840d17019aea4d10f4332128fe9b0fec985b5626cedce3aaccd7",
         "candidate/geometry.npy": "548077dcc973840d17019aea4d10f4332128fe9b0fec985b5626cedce3aaccd7",
@@ -9099,6 +9928,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "8d460a79e11fd988f291e4dbb059be2f02ad02f0db532b81e4d56cd0399f194c",
         "candidate/geometry.npy": "8d460a79e11fd988f291e4dbb059be2f02ad02f0db532b81e4d56cd0399f194c",
@@ -9303,6 +10151,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "f8fbd0a41cbe8204514906ad17ea36b4fd9d0dc108978c779ddf73e662dd120d",
         "candidate/geometry.npy": "f8fbd0a41cbe8204514906ad17ea36b4fd9d0dc108978c779ddf73e662dd120d",
@@ -9507,6 +10374,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "ee481361d41278110ea3ebbd342d66f4d0d5c9bfdc92ac9e6663df80a7b1f770",
         "candidate/geometry.npy": "ee481361d41278110ea3ebbd342d66f4d0d5c9bfdc92ac9e6663df80a7b1f770",
@@ -9711,6 +10597,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "a2f00c66a487969934f0504a3d0c5113f6dc30dafefd1dcb8fce038823e76360",
         "candidate/geometry.npy": "a2f00c66a487969934f0504a3d0c5113f6dc30dafefd1dcb8fce038823e76360",
@@ -9915,6 +10820,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "ff60db197ad2247c7b0e5514fd3afb7d04f874d68a56151d18dab77750942ae2",
         "candidate/geometry.npy": "ff60db197ad2247c7b0e5514fd3afb7d04f874d68a56151d18dab77750942ae2",
@@ -10119,6 +11043,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "852e0c44252a4677a2527457c580aceb189a98138f21310b4054c64fb94643c7",
         "candidate/geometry.npy": "852e0c44252a4677a2527457c580aceb189a98138f21310b4054c64fb94643c7",
@@ -10323,6 +11266,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "8ed9fc13625d8279fba2a7a848eba575b00ae0596e54a330a6769db5028b5f87",
         "candidate/geometry.npy": "8ed9fc13625d8279fba2a7a848eba575b00ae0596e54a330a6769db5028b5f87",
@@ -10527,6 +11489,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "b9798874bb328578f1712c1df41116e02584b8c446a5f255745611cf10e8eaee",
         "candidate/geometry.npy": "b9798874bb328578f1712c1df41116e02584b8c446a5f255745611cf10e8eaee",
@@ -10731,6 +11712,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "ab35adbf81571c707522eafeef4845053ee1aa21d010e3136472b70f4af0b917",
         "candidate/geometry.npy": "ab35adbf81571c707522eafeef4845053ee1aa21d010e3136472b70f4af0b917",
@@ -10935,6 +11935,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "b0f9dbf041433af80a78f3e59edf69b63cc6e2687611eb32e8411f8a4a134bde",
         "candidate/geometry.npy": "b0f9dbf041433af80a78f3e59edf69b63cc6e2687611eb32e8411f8a4a134bde",
@@ -11139,6 +12158,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "e79e7c6c9f92cc3d3d00617a8fcc34b654ac5d74b5c447aec3b9126e45e9302e",
         "candidate/geometry.npy": "e79e7c6c9f92cc3d3d00617a8fcc34b654ac5d74b5c447aec3b9126e45e9302e",
@@ -11343,6 +12381,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "7cef4c0ec002542a5a7a5b121f184a4759ab7f13c5e66f1a0a09fe20e7c6c99f",
         "candidate/geometry.npy": "7cef4c0ec002542a5a7a5b121f184a4759ab7f13c5e66f1a0a09fe20e7c6c99f",
@@ -11547,6 +12604,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "e2c2f4dfe446a3c70e9f598d8ed6454108cfe1b0f4626a09ffa81f70056c8a8e",
         "candidate/geometry.npy": "e2c2f4dfe446a3c70e9f598d8ed6454108cfe1b0f4626a09ffa81f70056c8a8e",
@@ -11751,6 +12827,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "8fe6e336a6d5ff43361862df7e46794c5b5a2ace6ee17f12212773bbed8b632a",
         "candidate/geometry.npy": "8fe6e336a6d5ff43361862df7e46794c5b5a2ace6ee17f12212773bbed8b632a",
@@ -11955,6 +13050,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "548077dcc973840d17019aea4d10f4332128fe9b0fec985b5626cedce3aaccd7",
         "candidate/geometry.npy": "548077dcc973840d17019aea4d10f4332128fe9b0fec985b5626cedce3aaccd7",
@@ -12159,6 +13273,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "8d460a79e11fd988f291e4dbb059be2f02ad02f0db532b81e4d56cd0399f194c",
         "candidate/geometry.npy": "8d460a79e11fd988f291e4dbb059be2f02ad02f0db532b81e4d56cd0399f194c",
@@ -12363,6 +13496,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "f8fbd0a41cbe8204514906ad17ea36b4fd9d0dc108978c779ddf73e662dd120d",
         "candidate/geometry.npy": "f8fbd0a41cbe8204514906ad17ea36b4fd9d0dc108978c779ddf73e662dd120d",
@@ -12569,6 +13721,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "15b392eaf15be3959b8bc883fe7e611c0a1d462b1502877944da0825fca828fc",
         "candidate/geometry.npy": "15b392eaf15be3959b8bc883fe7e611c0a1d462b1502877944da0825fca828fc",
@@ -12773,6 +13944,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "6bea5304657c93a747c4093f78ed760ce409cae006841ce221042c552d84cddc",
         "candidate/geometry.npy": "6bea5304657c93a747c4093f78ed760ce409cae006841ce221042c552d84cddc",
@@ -12977,6 +14167,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "015fa8bbd751452bba6dc3fe60ab3dab1a017d9efeff774f77b3e18ec74f93b7",
         "candidate/geometry.npy": "015fa8bbd751452bba6dc3fe60ab3dab1a017d9efeff774f77b3e18ec74f93b7",
@@ -13181,6 +14390,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "40111c476cba12d4ec63876a64eb18956c1293a4482c0788b3e0832a653a8cbe",
         "candidate/geometry.npy": "40111c476cba12d4ec63876a64eb18956c1293a4482c0788b3e0832a653a8cbe",
@@ -13385,6 +14613,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "1ab8f40f54b331a532647b8b40b30bf53c5db01d0bc4eeecabde5a771282988b",
         "candidate/geometry.npy": "1ab8f40f54b331a532647b8b40b30bf53c5db01d0bc4eeecabde5a771282988b",
@@ -13589,6 +14836,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "4e94b57e56a3ea393e629b69de1547fade3c44a5809369121d7f24c363bb9d15",
         "candidate/geometry.npy": "4e94b57e56a3ea393e629b69de1547fade3c44a5809369121d7f24c363bb9d15",
@@ -13793,6 +15059,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "410e72f77dd8936933b150263271b3f430a74d945ad25828b623d5548f95dcf2",
         "candidate/geometry.npy": "410e72f77dd8936933b150263271b3f430a74d945ad25828b623d5548f95dcf2",
@@ -13997,6 +15282,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "4f85735199fb2d412ab59f043a544b1a1d5261fec406f13e60fb87737c65d90a",
         "candidate/geometry.npy": "4f85735199fb2d412ab59f043a544b1a1d5261fec406f13e60fb87737c65d90a",
@@ -14201,6 +15505,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "b90f0856c8cd0949097483795d93c7bd15996fe38110eb03dd3f259cb3332468",
         "candidate/geometry.npy": "b90f0856c8cd0949097483795d93c7bd15996fe38110eb03dd3f259cb3332468",
@@ -14405,6 +15728,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "623721ab747b4d0b57eba932cd9a959e39863bbed437495eea1467d176257d78",
         "candidate/geometry.npy": "623721ab747b4d0b57eba932cd9a959e39863bbed437495eea1467d176257d78",
@@ -14609,6 +15951,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "19f25f4c900ed84ba12fb746e57d7c8b7580e263c0a79841b227ffe9f1eb569b",
         "candidate/geometry.npy": "19f25f4c900ed84ba12fb746e57d7c8b7580e263c0a79841b227ffe9f1eb569b",
@@ -14813,6 +16174,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "b7e6b462155f8112035f3657841ea8664663e1dde2ec4d5d13ab1e88a1c2e4f9",
         "candidate/geometry.npy": "b7e6b462155f8112035f3657841ea8664663e1dde2ec4d5d13ab1e88a1c2e4f9",
@@ -15017,6 +16397,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "68c1d7434ac3cdf3026adfedfcf1e3acfac0e6314d05eede2490cc04d649b7ec",
         "candidate/geometry.npy": "68c1d7434ac3cdf3026adfedfcf1e3acfac0e6314d05eede2490cc04d649b7ec",
@@ -15221,6 +16620,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "7f53f073c11f0cfcf4a06cc035063be7acd6b50df0d3b4b87642b944a5e182a9",
         "candidate/geometry.npy": "7f53f073c11f0cfcf4a06cc035063be7acd6b50df0d3b4b87642b944a5e182a9",
@@ -15425,6 +16843,25 @@
           "candidate_source": "demo/candidate_before_bob.py:79"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "bea716b21ded241a83310aa2ed97b84e7abf19175363e2f558ecfcf1025ff9ca",
         "candidate/geometry.npy": "bea716b21ded241a83310aa2ed97b84e7abf19175363e2f558ecfcf1025ff9ca",
@@ -15629,6 +17066,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "ee481361d41278110ea3ebbd342d66f4d0d5c9bfdc92ac9e6663df80a7b1f770",
         "candidate/geometry.npy": "ee481361d41278110ea3ebbd342d66f4d0d5c9bfdc92ac9e6663df80a7b1f770",
@@ -15833,6 +17289,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "a2f00c66a487969934f0504a3d0c5113f6dc30dafefd1dcb8fce038823e76360",
         "candidate/geometry.npy": "a2f00c66a487969934f0504a3d0c5113f6dc30dafefd1dcb8fce038823e76360",
@@ -16037,6 +17512,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "ff60db197ad2247c7b0e5514fd3afb7d04f874d68a56151d18dab77750942ae2",
         "candidate/geometry.npy": "ff60db197ad2247c7b0e5514fd3afb7d04f874d68a56151d18dab77750942ae2",
@@ -16241,6 +17735,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "852e0c44252a4677a2527457c580aceb189a98138f21310b4054c64fb94643c7",
         "candidate/geometry.npy": "852e0c44252a4677a2527457c580aceb189a98138f21310b4054c64fb94643c7",
@@ -16445,6 +17958,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "8ed9fc13625d8279fba2a7a848eba575b00ae0596e54a330a6769db5028b5f87",
         "candidate/geometry.npy": "8ed9fc13625d8279fba2a7a848eba575b00ae0596e54a330a6769db5028b5f87",
@@ -16649,6 +18181,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "b9798874bb328578f1712c1df41116e02584b8c446a5f255745611cf10e8eaee",
         "candidate/geometry.npy": "b9798874bb328578f1712c1df41116e02584b8c446a5f255745611cf10e8eaee",
@@ -16853,6 +18404,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "ab35adbf81571c707522eafeef4845053ee1aa21d010e3136472b70f4af0b917",
         "candidate/geometry.npy": "ab35adbf81571c707522eafeef4845053ee1aa21d010e3136472b70f4af0b917",
@@ -17057,6 +18627,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "b0f9dbf041433af80a78f3e59edf69b63cc6e2687611eb32e8411f8a4a134bde",
         "candidate/geometry.npy": "b0f9dbf041433af80a78f3e59edf69b63cc6e2687611eb32e8411f8a4a134bde",
@@ -17261,6 +18850,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "e79e7c6c9f92cc3d3d00617a8fcc34b654ac5d74b5c447aec3b9126e45e9302e",
         "candidate/geometry.npy": "e79e7c6c9f92cc3d3d00617a8fcc34b654ac5d74b5c447aec3b9126e45e9302e",
@@ -17465,6 +19073,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "7cef4c0ec002542a5a7a5b121f184a4759ab7f13c5e66f1a0a09fe20e7c6c99f",
         "candidate/geometry.npy": "7cef4c0ec002542a5a7a5b121f184a4759ab7f13c5e66f1a0a09fe20e7c6c99f",
@@ -17669,6 +19296,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "e2c2f4dfe446a3c70e9f598d8ed6454108cfe1b0f4626a09ffa81f70056c8a8e",
         "candidate/geometry.npy": "e2c2f4dfe446a3c70e9f598d8ed6454108cfe1b0f4626a09ffa81f70056c8a8e",
@@ -17873,6 +19519,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "8fe6e336a6d5ff43361862df7e46794c5b5a2ace6ee17f12212773bbed8b632a",
         "candidate/geometry.npy": "8fe6e336a6d5ff43361862df7e46794c5b5a2ace6ee17f12212773bbed8b632a",
@@ -18077,6 +19742,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "548077dcc973840d17019aea4d10f4332128fe9b0fec985b5626cedce3aaccd7",
         "candidate/geometry.npy": "548077dcc973840d17019aea4d10f4332128fe9b0fec985b5626cedce3aaccd7",
@@ -18281,6 +19965,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "8d460a79e11fd988f291e4dbb059be2f02ad02f0db532b81e4d56cd0399f194c",
         "candidate/geometry.npy": "8d460a79e11fd988f291e4dbb059be2f02ad02f0db532b81e4d56cd0399f194c",
@@ -18485,6 +20188,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "f8fbd0a41cbe8204514906ad17ea36b4fd9d0dc108978c779ddf73e662dd120d",
         "candidate/geometry.npy": "f8fbd0a41cbe8204514906ad17ea36b4fd9d0dc108978c779ddf73e662dd120d",
@@ -18689,6 +20411,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "ee481361d41278110ea3ebbd342d66f4d0d5c9bfdc92ac9e6663df80a7b1f770",
         "candidate/geometry.npy": "ee481361d41278110ea3ebbd342d66f4d0d5c9bfdc92ac9e6663df80a7b1f770",
@@ -18893,6 +20634,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "a2f00c66a487969934f0504a3d0c5113f6dc30dafefd1dcb8fce038823e76360",
         "candidate/geometry.npy": "a2f00c66a487969934f0504a3d0c5113f6dc30dafefd1dcb8fce038823e76360",
@@ -19097,6 +20857,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "ff60db197ad2247c7b0e5514fd3afb7d04f874d68a56151d18dab77750942ae2",
         "candidate/geometry.npy": "ff60db197ad2247c7b0e5514fd3afb7d04f874d68a56151d18dab77750942ae2",
@@ -19301,6 +21080,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "852e0c44252a4677a2527457c580aceb189a98138f21310b4054c64fb94643c7",
         "candidate/geometry.npy": "852e0c44252a4677a2527457c580aceb189a98138f21310b4054c64fb94643c7",
@@ -19505,6 +21303,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "8ed9fc13625d8279fba2a7a848eba575b00ae0596e54a330a6769db5028b5f87",
         "candidate/geometry.npy": "8ed9fc13625d8279fba2a7a848eba575b00ae0596e54a330a6769db5028b5f87",
@@ -19709,6 +21526,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "b9798874bb328578f1712c1df41116e02584b8c446a5f255745611cf10e8eaee",
         "candidate/geometry.npy": "b9798874bb328578f1712c1df41116e02584b8c446a5f255745611cf10e8eaee",
@@ -19913,6 +21749,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "ab35adbf81571c707522eafeef4845053ee1aa21d010e3136472b70f4af0b917",
         "candidate/geometry.npy": "ab35adbf81571c707522eafeef4845053ee1aa21d010e3136472b70f4af0b917",
@@ -20117,6 +21972,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "b0f9dbf041433af80a78f3e59edf69b63cc6e2687611eb32e8411f8a4a134bde",
         "candidate/geometry.npy": "b0f9dbf041433af80a78f3e59edf69b63cc6e2687611eb32e8411f8a4a134bde",
@@ -20321,6 +22195,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "e79e7c6c9f92cc3d3d00617a8fcc34b654ac5d74b5c447aec3b9126e45e9302e",
         "candidate/geometry.npy": "e79e7c6c9f92cc3d3d00617a8fcc34b654ac5d74b5c447aec3b9126e45e9302e",
@@ -20525,6 +22418,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "7cef4c0ec002542a5a7a5b121f184a4759ab7f13c5e66f1a0a09fe20e7c6c99f",
         "candidate/geometry.npy": "7cef4c0ec002542a5a7a5b121f184a4759ab7f13c5e66f1a0a09fe20e7c6c99f",
@@ -20729,6 +22641,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "e2c2f4dfe446a3c70e9f598d8ed6454108cfe1b0f4626a09ffa81f70056c8a8e",
         "candidate/geometry.npy": "e2c2f4dfe446a3c70e9f598d8ed6454108cfe1b0f4626a09ffa81f70056c8a8e",
@@ -20933,6 +22864,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "8fe6e336a6d5ff43361862df7e46794c5b5a2ace6ee17f12212773bbed8b632a",
         "candidate/geometry.npy": "8fe6e336a6d5ff43361862df7e46794c5b5a2ace6ee17f12212773bbed8b632a",
@@ -21137,6 +23087,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "548077dcc973840d17019aea4d10f4332128fe9b0fec985b5626cedce3aaccd7",
         "candidate/geometry.npy": "548077dcc973840d17019aea4d10f4332128fe9b0fec985b5626cedce3aaccd7",
@@ -21341,6 +23310,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "8d460a79e11fd988f291e4dbb059be2f02ad02f0db532b81e4d56cd0399f194c",
         "candidate/geometry.npy": "8d460a79e11fd988f291e4dbb059be2f02ad02f0db532b81e4d56cd0399f194c",
@@ -21545,6 +23533,25 @@
           "candidate_source": "evaluation/candidates.py:32"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "f8fbd0a41cbe8204514906ad17ea36b4fd9d0dc108978c779ddf73e662dd120d",
         "candidate/geometry.npy": "f8fbd0a41cbe8204514906ad17ea36b4fd9d0dc108978c779ddf73e662dd120d",
@@ -21749,6 +23756,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "ee481361d41278110ea3ebbd342d66f4d0d5c9bfdc92ac9e6663df80a7b1f770",
         "candidate/geometry.npy": "ee481361d41278110ea3ebbd342d66f4d0d5c9bfdc92ac9e6663df80a7b1f770",
@@ -21953,6 +23979,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "a2f00c66a487969934f0504a3d0c5113f6dc30dafefd1dcb8fce038823e76360",
         "candidate/geometry.npy": "a2f00c66a487969934f0504a3d0c5113f6dc30dafefd1dcb8fce038823e76360",
@@ -22157,6 +24202,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "ff60db197ad2247c7b0e5514fd3afb7d04f874d68a56151d18dab77750942ae2",
         "candidate/geometry.npy": "ff60db197ad2247c7b0e5514fd3afb7d04f874d68a56151d18dab77750942ae2",
@@ -22361,6 +24425,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "852e0c44252a4677a2527457c580aceb189a98138f21310b4054c64fb94643c7",
         "candidate/geometry.npy": "852e0c44252a4677a2527457c580aceb189a98138f21310b4054c64fb94643c7",
@@ -22565,6 +24648,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "8ed9fc13625d8279fba2a7a848eba575b00ae0596e54a330a6769db5028b5f87",
         "candidate/geometry.npy": "8ed9fc13625d8279fba2a7a848eba575b00ae0596e54a330a6769db5028b5f87",
@@ -22769,6 +24871,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "b9798874bb328578f1712c1df41116e02584b8c446a5f255745611cf10e8eaee",
         "candidate/geometry.npy": "b9798874bb328578f1712c1df41116e02584b8c446a5f255745611cf10e8eaee",
@@ -22973,6 +25094,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "ab35adbf81571c707522eafeef4845053ee1aa21d010e3136472b70f4af0b917",
         "candidate/geometry.npy": "ab35adbf81571c707522eafeef4845053ee1aa21d010e3136472b70f4af0b917",
@@ -23177,6 +25317,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "b0f9dbf041433af80a78f3e59edf69b63cc6e2687611eb32e8411f8a4a134bde",
         "candidate/geometry.npy": "b0f9dbf041433af80a78f3e59edf69b63cc6e2687611eb32e8411f8a4a134bde",
@@ -23381,6 +25540,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "e79e7c6c9f92cc3d3d00617a8fcc34b654ac5d74b5c447aec3b9126e45e9302e",
         "candidate/geometry.npy": "e79e7c6c9f92cc3d3d00617a8fcc34b654ac5d74b5c447aec3b9126e45e9302e",
@@ -23585,6 +25763,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "7cef4c0ec002542a5a7a5b121f184a4759ab7f13c5e66f1a0a09fe20e7c6c99f",
         "candidate/geometry.npy": "7cef4c0ec002542a5a7a5b121f184a4759ab7f13c5e66f1a0a09fe20e7c6c99f",
@@ -23789,6 +25986,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "e2c2f4dfe446a3c70e9f598d8ed6454108cfe1b0f4626a09ffa81f70056c8a8e",
         "candidate/geometry.npy": "e2c2f4dfe446a3c70e9f598d8ed6454108cfe1b0f4626a09ffa81f70056c8a8e",
@@ -23993,6 +26209,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "8fe6e336a6d5ff43361862df7e46794c5b5a2ace6ee17f12212773bbed8b632a",
         "candidate/geometry.npy": "8fe6e336a6d5ff43361862df7e46794c5b5a2ace6ee17f12212773bbed8b632a",
@@ -24197,6 +26432,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "548077dcc973840d17019aea4d10f4332128fe9b0fec985b5626cedce3aaccd7",
         "candidate/geometry.npy": "548077dcc973840d17019aea4d10f4332128fe9b0fec985b5626cedce3aaccd7",
@@ -24401,6 +26655,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "8d460a79e11fd988f291e4dbb059be2f02ad02f0db532b81e4d56cd0399f194c",
         "candidate/geometry.npy": "8d460a79e11fd988f291e4dbb059be2f02ad02f0db532b81e4d56cd0399f194c",
@@ -24605,6 +26878,25 @@
           "candidate_source": "paritylens/pipelines/candidate.py:74"
         }
       ],
+      "naive_structural_check": {
+        "name": "Final shape/dtype baseline",
+        "stage": "model_input",
+        "reference_shape": [
+          3,
+          224,
+          224
+        ],
+        "candidate_shape": [
+          3,
+          224,
+          224
+        ],
+        "reference_dtype": "float32",
+        "candidate_dtype": "float32",
+        "shape_matches": true,
+        "dtype_matches": true,
+        "passed": true
+      },
       "recorded_array_sha256": {
         "candidate/decode.npy": "f8fbd0a41cbe8204514906ad17ea36b4fd9d0dc108978c779ddf73e662dd120d",
         "candidate/geometry.npy": "f8fbd0a41cbe8204514906ad17ea36b4fd9d0dc108978c779ddf73e662dd120d",

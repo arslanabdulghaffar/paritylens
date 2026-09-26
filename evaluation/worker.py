@@ -3,16 +3,23 @@ import json
 from pathlib import Path
 import shutil
 import sys
+from time import perf_counter
+
+import numpy as np
 
 from demo import candidate_before_bob
 from demo.report import stage_details
 from paritylens.pipelines import candidate, reference
 from evaluation import adapter, candidates
+from evaluation.baseline import naive_structural_check
 from evaluation.fixtures import load_manifest
 from evaluation.scenarios import get_scenario
 
 
-def execute_case(scenario_id: str, fixture: dict, contract: dict) -> dict:
+def execute_case(scenario_id: str, fixture: dict, contract: dict, timings: dict | None = None) -> dict:
+    started = perf_counter()
+    if not Path(".evaluation-workspace").is_file() or Path.cwd().resolve() != Path(__file__).resolve().parents[1]:
+        raise ValueError("Evaluation execution requires an isolated workspace")
     scenario = get_scenario(scenario_id)
     image_path = Path("evaluation/fixtures") / fixture["filename"]
     if hashlib.sha256(image_path.read_bytes()).hexdigest() != fixture["sha256"]:
@@ -23,22 +30,27 @@ def execute_case(scenario_id: str, fixture: dict, contract: dict) -> dict:
         raise ValueError("Evidence path must stay inside the disposable workspace")
     if evidence.exists():
         shutil.rmtree(evidence)
+    reference_start = perf_counter()
     reference.run(image_path)
+    candidate_start = perf_counter()
     if scenario_id == "historical_rgb_bgr":
         candidate_before_bob.run(image_path)
     elif scenario_id == "clean_control":
         candidate.run(image_path)
     else:
         candidates.run(image_path, scenario_id, contract)
+    candidate_end = perf_counter()
     metadata_path = Path("evaluation_metadata.json")
     metadata_path.write_text(json.dumps(fixture), encoding="utf-8")
+    comparison_start = perf_counter()
     comparison, core_class = adapter.compare(Path("contract/preprocessing_contract.json"), metadata_path)
+    comparison_end = perf_counter()
     stages = stage_details(comparison, contract, fixture, Path(scenario.candidate_implementation))
     failure = comparison.first_failure
     failed_stage = next((stage for stage in stages if stage["comparison"] == "FAIL"), None)
     boundary = failure.stage if failure else None
     classification = failure.defect_class if failure else None
-    return {
+    result = {
         "scenario": scenario.metadata(), "fixture": image_path.as_posix(),
         "fixture_sha256": fixture["sha256"], "probe_coordinate": fixture["probe_coordinate"],
         "expected_first_boundary": scenario.expected_first_boundary, "observed_first_boundary": boundary,
@@ -51,9 +63,18 @@ def execute_case(scenario_id: str, fixture: dict, contract: dict) -> dict:
                             and boundary == scenario.expected_first_boundary
                             and classification == scenario.expected_classification),
         "stages": stages,
+        "naive_structural_check": naive_structural_check(
+            np.load(evidence / "reference/model_input.npy", allow_pickle=False),
+            np.load(evidence / "candidate/model_input.npy", allow_pickle=False)),
         "recorded_array_sha256": {path.relative_to(evidence).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
                                   for path in sorted(evidence.rglob("*.npy"))},
     }
+    if timings is not None:
+        timings.update(reference_ms=(candidate_start-reference_start)*1000,
+                       candidate_ms=(candidate_end-candidate_start)*1000,
+                       comparison_ms=(comparison_end-comparison_start)*1000,
+                       complete_scenario_ms=(perf_counter()-started)*1000)
+    return result
 
 
 def main() -> int:

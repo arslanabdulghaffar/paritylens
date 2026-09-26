@@ -45,7 +45,6 @@ def execute(mode: str) -> None:
 
 
 manifest = provenance()
-contract = json.loads((ROOT / "contract/preprocessing_contract.json").read_text())
 integrity = check_integrity()
 intact = all(integrity.values())
 st.markdown('<div class="eyebrow">NEURALFOUNDRY / PREPROCESSING DEBUGGER</div>', unsafe_allow_html=True)
@@ -55,6 +54,8 @@ if not intact:
     st.error("Source integrity check failed. Results are unavailable until the approved experiment is restored.")
     st.write([name for name, matches in integrity.items() if not matches])
     st.stop()
+
+contract = json.loads((ROOT / "contract/preprocessing_contract.json").read_text())
 
 scenario_id = st.selectbox(
     "Scenario", ("historical_rgb_bgr", "scaling_mismatch", "normalization_mismatch"),

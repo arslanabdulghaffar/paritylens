@@ -1,0 +1,57 @@
+{
+  "generated_at": "2026-09-26T17:53:04.771183+00:00",
+  "packages": [
+    {
+      "name": "numpy",
+      "version": "2.5.3",
+      "purpose": "Array storage, arithmetic, comparison and timing statistics",
+      "license_metadata": "BSD-3-Clause AND 0BSD AND MIT AND Zlib AND CC0-1.0",
+      "license_files": [
+        "LICENSE.txt",
+        "numpy/_core/include/numpy/libdivide/LICENSE.txt",
+        "numpy/_core/src/common/pythoncapi-compat/COPYING",
+        "numpy/_core/src/highway/LICENSE",
+        "numpy/_core/src/multiarray/dragon4_LICENSE.txt",
+        "numpy/_core/src/npysort/x86-simd-sort/LICENSE.md",
+        "numpy/_core/src/umath/svml/LICENSE",
+        "numpy/fft/pocketfft/LICENSE.md",
+        "numpy/linalg/lapack_lite/LICENSE.txt",
+        "numpy/ma/LICENSE",
+        "numpy/random/LICENSE.md",
+        "numpy/random/src/distributions/LICENSE.md",
+        "numpy/random/src/mt19937/LICENSE.md",
+        "numpy/random/src/pcg64/LICENSE.md",
+        "numpy/random/src/philox/LICENSE.md",
+        "numpy/random/src/sfc64/LICENSE.md",
+        "numpy/random/src/splitmix64/LICENSE.md"
+      ]
+    },
+    {
+      "name": "pillow",
+      "version": "12.3.0",
+      "purpose": "Trusted RGB image decoding and synthetic PNG generation",
+      "license_metadata": "MIT-CMU",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    {
+      "name": "opencv-python-headless",
+      "version": "5.0.0.93",
+      "purpose": "Independent serving/candidate preprocessing without desktop GUI",
+      "license_metadata": "Apache 2.0",
+      "license_files": [
+        "LICENSE-3RD-PARTY.txt",
+        "LICENSE.txt"
+      ]
+    },
+    {
+      "name": "streamlit",
+      "version": "1.64.0",
+      "purpose": "Local single-page demonstration and UI tests",
+      "license_metadata": "Apache-2.0",
+      "license_files": []
+    }
+  ],
+  "source": "Installed distribution metadata; direct dependencies only, not a full transitive license or vulnerability audit."
+}

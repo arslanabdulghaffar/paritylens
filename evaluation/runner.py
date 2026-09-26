@@ -1,6 +1,5 @@
 import argparse
 from datetime import datetime, timezone
-import hashlib
 import importlib.metadata
 import json
 from pathlib import Path
@@ -11,13 +10,13 @@ import sys
 import tempfile
 
 from demo.runner import ROOT, check_integrity, file_hash, provenance
-from evaluation.fixtures import FIXTURE_DIR, load_manifest
+from evaluation.fixtures import load_manifest
 from evaluation.metrics import summarize
 from evaluation.report import DISCLAIMER, case_report, markdown_report, validate_suite
 from evaluation.scenarios import SCENARIOS, get_scenario
 
-EXECUTION_FILES = ("__init__.py", "adapter.py", "candidates.py", "fixtures.py", "metrics.py",
-                   "report.py", "runner.py", "scenarios.py", "worker.py")
+EXECUTION_FILES = ("__init__.py", "adapter.py", "baseline.py", "candidates.py", "fixtures.py", "metrics.py",
+                   "report.py", "runner.py", "scenarios.py", "worker.py", "benchmark_worker.py")
 
 
 def input_fingerprint() -> dict:
@@ -25,6 +24,7 @@ def input_fingerprint() -> dict:
     contract = json.loads(contract_path.read_text())
     names = list(provenance()["repaired_file_sha256"])
     names += ["demo/candidate_before_bob.py", "demo/report.py"]
+    names += ["demo/runner.py", "demo/worker.py"]
     names += [f"evaluation/{name}" for name in EXECUTION_FILES]
     names += ["evaluation/fixtures/metadata.json"]
     names += [f"evaluation/fixtures/{f['filename']}" for f in load_manifest()["fixtures"]]
@@ -32,6 +32,22 @@ def input_fingerprint() -> dict:
             "comparison_policy": contract["comparison"]["comparator_policy"],
             "hash_policy": "SHA-256, CRLF normalized to LF for Python/JSON; other files hashed as bytes.",
             "files": {name: file_hash(ROOT / name) for name in names}}
+
+
+def prepare_workspace(workspace: Path) -> None:
+    manifest = load_manifest()
+    names = list(provenance()["repaired_file_sha256"])
+    names += ["demo/__init__.py", "demo/candidate_before_bob.py", "demo/report.py", "demo/runner.py", "demo/provenance.json"]
+    names += [f"evaluation/{name}" for name in EXECUTION_FILES]
+    names += ["evaluation/fixtures/metadata.json"]
+    names += [f"evaluation/fixtures/{f['filename']}" for f in manifest["fixtures"]]
+    for name in names:
+        destination = workspace / name
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT / name, destination)
+    if not all(check_integrity(workspace).values()):
+        raise RuntimeError("Isolated source integrity check failed")
+    (workspace / ".evaluation-workspace").touch()
 
 
 def run_cases(scenario_ids: list[str] | None = None, fixture_ids: list[str] | None = None) -> list[dict]:
@@ -49,18 +65,7 @@ def run_cases(scenario_ids: list[str] | None = None, fixture_ids: list[str] | No
         raise RuntimeError("Frozen source integrity check failed")
     with tempfile.TemporaryDirectory(prefix="paritylens-evaluation-") as temporary:
         workspace = Path(temporary)
-        names = list(provenance()["repaired_file_sha256"])
-        names += ["demo/__init__.py", "demo/candidate_before_bob.py", "demo/report.py"]
-        names += [f"evaluation/{name}" for name in EXECUTION_FILES]
-        names += ["evaluation/fixtures/metadata.json"]
-        names += [f"evaluation/fixtures/{f['filename']}" for f in manifest["fixtures"]]
-        for name in names:
-            destination = workspace / name
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(ROOT / name, destination)
-        if not all(check_integrity(workspace).values()):
-            raise RuntimeError("Isolated source integrity check failed")
-        (workspace / ".evaluation-workspace").touch()
+        prepare_workspace(workspace)
         (workspace / "request.json").write_text(json.dumps({"scenarios": scenario_ids, "fixtures": fixture_ids}))
         process = subprocess.run([sys.executable, "-B", "-m", "evaluation.worker"], cwd=workspace,
                                  capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=180)

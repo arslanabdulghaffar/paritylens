@@ -1,6 +1,8 @@
 import hashlib
 import json
 
+from evaluation.baseline import summarize_baseline
+
 
 def semantic_digest(cases: list[dict]) -> str:
     payload = json.dumps(cases, sort_keys=True, separators=(",", ":"), allow_nan=False)
@@ -22,6 +24,7 @@ def summarize(cases: list[dict], repeated: list[dict]) -> dict:
                                      "accuracy": classified / len(defects) if defects else None},
         "clean_false_positives": sum(c["parity_check"] == "FAIL" for c in controls),
         "expectations_met": sum(c["expectation_met"] for c in cases),
+        "final_shape_dtype_baseline": summarize_baseline(cases),
         "reproducibility": {"runs": 2, "matched": cases == repeated,
                             "first_digest": semantic_digest(cases), "second_digest": semantic_digest(repeated)},
     }
