@@ -1,0 +1,176 @@
+import html
+import json
+import logging
+
+import streamlit as st
+
+from demo.report import report_json
+from demo.runner import FIXTURE, ROOT, SCENARIO, check_integrity, provenance, run_demo
+
+st.set_page_config(page_title="ParityLens", page_icon="◧", layout="wide")
+st.markdown("""
+<style>
+.block-container { max-width: 1300px; padding-top: 2rem; padding-bottom: 3rem; }
+h1 { letter-spacing: -.045em; padding-bottom: .15rem !important; }
+h3 { letter-spacing: -.02em; }
+.eyebrow { font: 600 .72rem monospace; letter-spacing: .12em; color: #758393; }
+.subtitle { color: #758393; font-size: 1.08rem; margin-bottom: 1.3rem; }
+.checks { display: flex; gap: 7px; flex-wrap: wrap; margin: 12px 0; }
+.pill { border: 1px solid #71809655; border-radius: 5px; padding: 5px 9px;
+        font: 600 .76rem monospace; }
+.pass { color: #17845c; background: #17845c0d; border-color: #17845c55; }
+.fail { color: #d04b42; background: #d04b420d; border-color: #d04b4255; }
+.muted { color: #758393; }
+.timeline { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 8px; margin: 16px 0; }
+.stage { border: 1px solid #71809644; border-radius: 7px; padding: 12px 10px; font: .78rem monospace; }
+.stage strong { display: block; margin-bottom: 7px; overflow-wrap: anywhere; }
+.stage.pass { border-color: #17845c88; }
+.stage.fail { border: 2px solid #d04b42; }
+.semantic { padding: 14px 16px; border-left: 4px solid #d04b42; background: #d04b420a;
+            font: 700 1rem monospace; margin: 12px 0; }
+@media(max-width: 650px) { .timeline { grid-template-columns: 1fr 1fr; } }
+</style>
+""", unsafe_allow_html=True)
+
+
+def badges(result: dict) -> None:
+    labels = (("Shape", "shape_check"), ("dtype", "dtype_check"), ("Parity", "parity_check"))
+    st.markdown('<div class="checks">' + "".join(
+        f'<span class="pill {result[key].lower()}">{label} {result[key]}</span>'
+        for label, key in labels) + '</div>', unsafe_allow_html=True)
+
+
+def execute(mode: str) -> None:
+    st.session_state.pop(mode, None)
+    try:
+        with st.spinner("Executing pipelines and frozen comparisons…"):
+            st.session_state[mode] = run_demo(mode)
+    except Exception:
+        st.error("Execution could not complete. Check the local server log, dependencies, and source integrity, then rerun.")
+        logging.exception("ParityLens demo failed")
+
+
+manifest = provenance()
+contract = json.loads((ROOT / "contract/preprocessing_contract.json").read_text())
+integrity = check_integrity()
+intact = all(integrity.values())
+st.markdown('<div class="eyebrow">NEURALFOUNDRY / PREPROCESSING DEBUGGER</div>', unsafe_allow_html=True)
+st.title("ParityLens")
+st.markdown('<div class="subtitle">Find where the model\'s input changed. Then prove the repair.</div>', unsafe_allow_html=True)
+if not intact:
+    st.error("Source integrity check failed. Results are unavailable until the approved experiment is restored.")
+    st.write([name for name, matches in integrity.items() if not matches])
+    st.stop()
+
+st.subheader("01  Compare")
+st.markdown(f"**{SCENARIO}**")
+context = st.columns(4)
+for column, label, value in zip(context,
+    ("Reference pipeline", "Candidate pipeline", "Frozen contract", "Fixture"),
+    ("Pillow · RGB", "OpenCV · historical / repaired", f"v{contract['version']} · human approved", "defect_rgb_bgr.png")):
+    with column:
+        st.caption(label)
+        st.write(value)
+
+left, right = st.columns(2)
+for column, mode, title in ((left, "before", "BEFORE BOB REPAIR"), (right, "after", "AFTER BOB REPAIR")):
+    with column, st.container(border=True):
+        st.markdown(f"**{title}**")
+        st.caption("Exact historical candidate" if mode == "before" else "Current Bob-repaired candidate")
+        if st.button(f"Run {title}", key=f"run_{mode}", type="primary" if mode == "before" else "secondary", width="stretch"):
+            execute(mode)
+        result = st.session_state.get(mode)
+        if result:
+            badges(result)
+            if result["first_violating_boundary"]:
+                st.markdown(f"First violation: **`{result['first_violating_boundary']}`**")
+                st.caption(result["classification"])
+            else:
+                st.markdown(f"**{len(result['stages'])} / {len(result['stages'])} frozen comparisons pass**")
+                st.caption("Normal candidate run · intervention disabled")
+            st.caption("Executed " + result["executed_at"][:19].replace("T", " ") + " UTC")
+        else:
+            st.caption("Not run yet. Results appear after execution.")
+
+before, after = st.session_state.get("before"), st.session_state.get("after")
+st.caption("Shape and dtype badges check all recorded stages, including the final model input.")
+st.divider()
+st.subheader("02  Trace")
+image_col, trace_col = st.columns([1, 4])
+with image_col:
+    st.image(str(ROOT / FIXTURE), caption="Synthetic input · 224 × 224", width="stretch")
+with trace_col:
+    available = [name for name in ("before", "after") if st.session_state.get(name)]
+    if not available:
+        st.info("Run BEFORE to locate the first boundary where the input changes.")
+        st.code("decode → geometry → scaling → normalization → model_input", language=None)
+    else:
+        mode = st.radio("Execution", available, format_func=lambda value: value.upper(), horizontal=True, key="trace_mode")
+        result = st.session_state[mode]
+        timeline = []
+        for stage in result["stages"]:
+            state = stage["comparison"]
+            label = "Not evaluated" if state == "NOT_EVALUATED" else state
+            css = state.lower() if state != "NOT_EVALUATED" else "muted"
+            timeline.append(f'<div class="stage {css}"><strong>{html.escape(stage["stage"])}</strong>{label}</div>')
+        st.markdown('<div class="timeline">' + ''.join(timeline) + '</div>', unsafe_allow_html=True)
+        if result["shape_check"] == result["dtype_check"] == "PASS" and result["parity_check"] == "FAIL":
+            st.markdown('<div class="semantic">SAME SHAPE · SAME DTYPE · DIFFERENT SEMANTIC INPUT</div>', unsafe_allow_html=True)
+        elif result["parity_check"] == "PASS":
+            st.success("Same shape. Same dtype. Matching values at every frozen boundary.")
+        if result["first_violating_boundary"]:
+            st.caption("The comparator stops at the first violation. Later arrays were recorded; their parity was not evaluated.")
+        selected = st.selectbox("Inspect recorded stage", [s["stage"] for s in result["stages"]], key="stage")
+        stage = next(s for s in result["stages"] if s["stage"] == selected)
+        st.caption(f"Probe pixel {result['probe_coordinate']} · channel slots shown as recorded")
+        a, b = st.columns(2)
+        for column, prefix, title in ((a, "reference", "Reference"), (b, "candidate", "Historical candidate" if mode == "before" else "Repaired candidate")):
+            with column:
+                st.markdown(f"**{title}**")
+                st.code(str(stage[f"{prefix}_probe"]), language=None)
+                st.caption(f"Shape {stage[f'{prefix}_shape']} · {stage[f'{prefix}_dtype']}")
+        maximum = stage["max_absolute_difference"]
+        st.markdown(f"Maximum absolute difference: **{maximum:.7g}**" if maximum is not None else "Maximum difference: not comparable")
+        st.caption("Classification: " + (stage["classification"] or ("none — passed" if stage["comparison"] == "PASS" else "not evaluated")))
+        with st.expander("Source locations and recorded measurements"):
+            st.text("Reference: " + str(stage["reference_source"]))
+            st.text("Candidate: " + str(stage["candidate_source"]))
+            st.dataframe([{"Stage": s["stage"], "Frozen comparison": s["comparison"],
+                           "Shape matches": s["shape_matches"], "dtype matches": s["dtype_matches"],
+                           "Max |difference|": s["max_absolute_difference"]} for s in result["stages"]],
+                         hide_index=True, width="stretch")
+
+st.divider()
+st.subheader("03  Verify repair")
+a, b, c = st.columns(3)
+with a, st.container(border=True):
+    st.caption("BEFORE")
+    st.markdown("**BGR decode mismatch**")
+    st.write(f"{before['parity_check']} · {before['first_violating_boundary'] or 'no violation'}" if before else "Awaiting historical execution")
+with b, st.container(border=True):
+    st.caption("BOB REPAIR")
+    st.markdown("**Explicit BGR → RGB conversion**")
+    st.code("cv2.imread(...)\n        ↓\ncv2.cvtColor(..., cv2.COLOR_BGR2RGB)", language=None)
+with c, st.container(border=True):
+    st.caption("AFTER")
+    st.markdown("**" + ("All frozen checks pass" if after and after["verification_state"] == "PASS" else "Verification pending" if not after else "Verification failed") + "**")
+    st.write("Final verification: " + (after["verification_state"] if after else "NOT RUN"))
+st.caption("Repair produced during the recorded IBM Bob IDE workflow. This app runs the recorded code; it does not invoke Bob.")
+st.markdown('<div class="checks">' + ''.join(f'<span class="pill pass">{label} unchanged</span>'
+    for label in ("Frozen contract", "Comparator", "Verifier", "Fixtures")) + '</div>', unsafe_allow_html=True)
+with st.expander("Provenance and verification evidence"):
+    st.text("Before commit: " + manifest["before_commit"])
+    st.text("Repair commit: " + manifest["repaired_commit"])
+    st.caption(manifest["hash_policy"])
+    st.caption("The historical snapshot matches its recorded SHA-256; the current core matches the repair commit. Each run uses an isolated, byte-for-byte copy.")
+    if after:
+        st.code(after["verification"]["command"], language="bash")
+        st.code(after["verification"]["stdout"], language=None)
+        if after["verification"]["stderr"]:
+            st.warning(after["verification"]["stderr"])
+if before and after:
+    st.download_button("Download evidence report · JSON", report_json(before, after, manifest),
+                       file_name="paritylens-rgb-bgr-evidence.json", mime="application/json", width="stretch")
+else:
+    st.button("Run both comparisons to unlock the evidence report", disabled=True, width="stretch")
+st.caption("One fixture. One defect. The same frozen checks before and after.")

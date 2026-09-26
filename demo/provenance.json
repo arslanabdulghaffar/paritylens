@@ -1,0 +1,24 @@
+{
+  "project": "ParityLens",
+  "before_commit": "d0ea1fd4f967aa00b1e2113025b19d5783fc7242",
+  "repaired_commit": "334a4013230076fbca4d2e3eb86281d1cf29b0c6",
+  "original_source": "paritylens/pipelines/candidate.py",
+  "before_explanation": "BEFORE is an exact byte-for-byte historical snapshot retrieved with git show; the defect was not recreated.",
+  "after_explanation": "AFTER executes the current candidate, checked against the actual Bob-produced repair from the recorded IBM Bob IDE workflow.",
+  "snapshot_sha256": "8f280f3a0b36c39e86ab964676afa3329296e8cd00ae6dfd426ca17cd0eae94d",
+  "hash_policy": "SHA-256; Python and JSON files normalize CRLF to LF for Git checkout portability; all other files use raw bytes. Snapshot hash uses raw bytes.",
+  "repaired_file_sha256": {
+    "contract/preprocessing_contract.json": "bf80be7de805269a4e1ac2c8665369d2f3dd070fd42461083c71a8e0755de736",
+    "fixtures/control_clean.png": "4a7175c78523481277255ac8e0a2a66c9a0571b97269294a8b475fa376b160f0",
+    "fixtures/defect_rgb_bgr.png": "4a7175c78523481277255ac8e0a2a66c9a0571b97269294a8b475fa376b160f0",
+    "fixtures/fixture_metadata.json": "6d0a30ac85bd3d013924f33713884e61b97c8b92fa6479a4ce78bb148d182c43",
+    "fixtures/generate_fixtures.py": "cf3fdff54e9dec10a4bbaced5e1454711252007a7ba044bd4da4207b6f7b20bf",
+    "paritylens/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "paritylens/__main__.py": "c9f9b456d37c162f082c61756655e92ba89d2d084462e1bd5985831f3368364e",
+    "paritylens/comparator.py": "f9fb92aca1089386b2b5eb0c3a6042a3692d707fc1a7ec3b16591e7801ef5bfd",
+    "paritylens/pipelines/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "paritylens/pipelines/candidate.py": "8bc4018d5fdf58afe278c123f8a11457c27001822ff1dfc9742aabc3554f8d8d",
+    "paritylens/pipelines/reference.py": "0178acb0a9a5577bf655064c434f3a8af26cbba22cb7d4a33754e44b73d85d91",
+    "paritylens/verifier.py": "2242dd776638b055aa6fe202cd504a68c708b5adcb8422e419681f71fa6c0313"
+  }
+}

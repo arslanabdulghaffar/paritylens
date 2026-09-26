@@ -32,3 +32,18 @@ python -m paritylens --fixture fixtures/defect_rgb_bgr.png --verify
 ```
 pip install -r requirements.txt
 ```
+
+## Public RGB/BGR demo
+
+Run `streamlit run app.py`, then run **BEFORE BOB REPAIR** and **AFTER BOB REPAIR**
+to inspect the trace and download a JSON evidence report. Bob is not invoked by
+the app; the repair was produced during the recorded IBM Bob IDE workflow.
+
+`python -m demo.runner --mode both` also prints the report. The historical
+candidate is an exact Git snapshot from `d0ea1fd`; AFTER uses the current candidate,
+checked against repair commit `334a401`. Both run in disposable directories;
+repository evidence is untouched. AFTER executes the normal core `--verify` CLI.
+The current repaired candidate passes the original CLI example above; use the
+demo's BEFORE mode to execute the genuine historical defect (exit code 1).
+
+Run `python -m unittest demo.test_demo` for demo execution and UI checks.
